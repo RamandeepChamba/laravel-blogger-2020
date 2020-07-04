@@ -28,15 +28,12 @@ class BlogController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'title' => 'required|min:5',
-            'content' => 'required'
-        ]);
+        $data = $this->validatedData();
         $data['user_id'] = Auth::id();
 
-        Blog::create($data);
+        $blog = Blog::create($data);
 
-        return redirect('/blogs');
+        return redirect('/blogs/' . $blog->id);
     }
 
     public function show($blog_id)
@@ -57,10 +54,7 @@ class BlogController extends Controller
     
     public function update($blog_id)
     {
-        $data = request()->validate([
-            'title' => 'required|min:5',
-            'content' => 'required'
-        ]);
+        $data = $this->validatedData();
 
         $blog = Blog::findOrFail($blog_id);
 
@@ -82,5 +76,13 @@ class BlogController extends Controller
         }
         $blog->delete();
         return redirect('/blogs');
+    }
+
+    protected function validatedData()
+    {
+        return request()->validate([
+            'title' => 'required|min:5',
+            'content' => 'required|min:5'
+        ]);
     }
 }

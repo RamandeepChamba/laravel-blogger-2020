@@ -21,16 +21,20 @@
                                 <p>{{ $blog->content }}</p>
                             </div>
             --}}
+                            <a href="/blogs/{{ $blog->id }}">view</a>
+                            @auth
+                            @if(auth()->user()->id === $blog->user_id)
                             <form action="/blogs/{{ $blog->id }}/edit" method="GET">
                                 @csrf
                                 <button type="submit">Edit</button>
                             </form>
-                            <a href="/blogs/{{ $blog->id }}">view</a>
                             <form action="/blogs/{{ $blog->id }}" method="POST">
                                 @method('DELETE')
                                 @csrf
                                 <button type="submit">Delete</button>
                             </form>
+                            @endif
+                            @endauth
                         </div>
                     </li>
                 @empty

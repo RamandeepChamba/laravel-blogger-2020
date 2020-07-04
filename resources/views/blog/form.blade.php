@@ -1,5 +1,5 @@
 {{-- Add Blog Form --}}
-<form action="/blogs{{ isset($blog) ? ('/' . $blog->id) : null }}" 
+<form action="/blogs{{ isset($blog->id) ? ('/' . $blog->id) : null }}" 
     method="POST">
     @method($method)
     @csrf
@@ -7,7 +7,7 @@
     <div class="form-group">
       <label for="blog-title">Title</label>
       <input type="text" class="form-control" id="blog-title"
-        value="{{ $blog->title }}" autofocus
+        value="{{ old('title') ?? $blog->title }}" autofocus
         min="5" name="title" required>
     </div>
     @error('title')
@@ -18,7 +18,7 @@
     <div class="form-group">
       <label for="blog-content">Content</label>
       <textarea type="content" class="form-control" 
-        id="blog-content" name="content" required>{{ $blog->content }}</textarea>
+        id="blog-content" name="content" required>{{ old('content') ?? $blog->content }}</textarea>
     </div>
     @error('content')
     <div class="alert alert-danger" role="alert">
