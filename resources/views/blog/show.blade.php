@@ -12,7 +12,7 @@
         </div>
 
         <div class="row">
-            <p class="ml-3">Author: {{ $blog->user_id }}</p>
+            <p class="ml-3">Author: {{ $blog->user->name }}</p>
         </div>
 
         <hr>
@@ -23,8 +23,20 @@
         </div>
 
         <hr>
+        <a href="#" class="btn btn-primary">Like</a><span class="ml-2">0</span>
+        <hr>
         <div class="row">
-            <h3>Comments 0</h3>
+            <h3>Comments {{$blog->comments->count()}}</h3>
+        </div>
+        <hr>
+        {{-- Comment Form --}}
+        <div class="row">
+            @include('comment.form')
+        </div>
+        {{-- Comments --}}
+        <hr>
+        <div class="row">
+            @include('comment.index')
         </div>
         <hr>
     </div>

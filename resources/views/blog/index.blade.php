@@ -9,29 +9,32 @@
             {{-- Blogs list --}}
             <ul id="blogs" class="list-group">
                 @forelse ($blogs as $blog)
-                    <li class="list-group-item">
+                    <li class="list-group-item mt-5">
                         <div class="card">
                             <div class="card-header">
                                 <h3>{{ $blog->title }}</h3>
                                 <br>
-                                <cite>~{{ $blog->user_id }}</cite>
+                                <cite>~{{ $blog->user->name }}</cite>
                             </div>
             {{-- 
                             <div class="card-body">
                                 <p>{{ $blog->content }}</p>
                             </div>
-            --}}
-                            <a href="/blogs/{{ $blog->id }}">view</a>
+            --}}    
+                            <p class="mb-0">
+                                <a href="/blogs/{{ $blog->id }}" 
+                                    class="btn btn-primary w-auto">View</a>
+                            </p>
                             @auth
                             @if(auth()->user()->id === $blog->user_id)
                             <form action="/blogs/{{ $blog->id }}/edit" method="GET">
                                 @csrf
-                                <button type="submit">Edit</button>
+                                <button type="submit" class="btn btn-secondary w-auto">Edit</button>
                             </form>
                             <form action="/blogs/{{ $blog->id }}" method="POST">
                                 @method('DELETE')
                                 @csrf
-                                <button type="submit">Delete</button>
+                                <button type="submit" class="btn btn-danger w-auto">Delete</button>
                             </form>
                             @endif
                             @endauth
