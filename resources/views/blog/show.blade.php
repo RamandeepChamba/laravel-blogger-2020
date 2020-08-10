@@ -36,7 +36,7 @@
         {{-- Comments --}}
         <hr>
         <div class="row">
-            @include('comment.index')
+            @include('comment.index', ['blog' => $blog])
         </div>
         <hr>
     </div>

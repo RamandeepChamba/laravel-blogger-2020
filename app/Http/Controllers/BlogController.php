@@ -39,7 +39,8 @@ class BlogController extends Controller
     public function show($blog_id)
     {
         $blog = Blog::findOrFail($blog_id);
-        return view('blog.show', compact('blog'));
+        $jsonComments = $blog->toJson();
+        return view('blog.show', compact(['blog', 'jsonComments']));
     }
 
     public function edit($blog_id)

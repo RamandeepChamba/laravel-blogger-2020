@@ -32,3 +32,4 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/hello', 'HelloController@index');
 Route::resource('blogs', 'BlogController');
 Route::resource('comments', 'CommentController');
+Route::get('comments/{comment_id}/replies', 'CommentController@getReplies');
