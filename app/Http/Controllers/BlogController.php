@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Blog;
+use App\Comment;
 use \Auth;
 
 class BlogController extends Controller
@@ -39,8 +40,10 @@ class BlogController extends Controller
     public function show($blog_id)
     {
         $blog = Blog::findOrFail($blog_id);
-        $jsonComments = $blog->toJson();
-        return view('blog.show', compact(['blog', 'jsonComments']));
+        $comments = $blog->comments()
+            ->with('user:id,name')
+            ->get()->toArray();
+        return view('blog.show', compact(['blog', 'comments']));
     }
 
     public function edit($blog_id)

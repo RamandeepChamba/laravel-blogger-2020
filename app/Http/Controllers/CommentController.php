@@ -49,9 +49,13 @@ class CommentController extends Controller
         return redirect('/blogs/' . $comment->commentable->id);
     }
 
-    public function getReplies($comment_id)
+    public function getReplies($parent_id)
     {
-        return Comment::findOrFail($comment_id)->replies()->with('user')->get();
+        $parent = Comment::findOrFail($parent_id);
+        $replies = $parent->replies()
+            ->with('user:id,name')
+            ->get()->toJson();
+        return $replies;
     }
 
     protected function validatedData()

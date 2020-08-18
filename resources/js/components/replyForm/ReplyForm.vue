@@ -1,5 +1,5 @@
 <template>
-    <div class="container p-0">
+    <div class="container row">
         <button class="btn btn-success" 
             v-show="!hasForm"
             v-on:click="toggleForm">
@@ -11,7 +11,6 @@
             :blog-id="blogId"
             :parent-id="parentId">
         </component>
-        
     </div>
 </template>
 

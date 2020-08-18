@@ -16,8 +16,7 @@
             </small>
             <br>
             <button type="submit" class="btn btn-success">Reply</button>
-            <button class="btn btn-warning"
-                v-show="hasForm" 
+            <button type="button" class="btn btn-warning"
                 v-on:click="toggleForm">
                 Cancel
             </button>
@@ -27,12 +26,12 @@
 
 <script>
     export default {
+        props: ['hasForm', 'toggleForm', 'blogId', 'parentId'],
+        
         data() {
             return {
                 csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
             }
         },
-
-        props: ['hasForm', 'toggleForm', 'blogId', 'parentId']
     }
 </script>
