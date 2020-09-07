@@ -5,11 +5,12 @@
             v-on:click="toggleForm">
             Reply
         </button>
-        <component :is="replyForm" 
-            :hasForm="hasForm" 
-            :toggleForm="toggleForm"
+        <component :is="replyForm"
+            class="my-3 ml-3"
             :blog-id="blogId"
-            :parent-id="parentId">
+            :parent-id="parentId"
+            v-on:toggle-reply-form="toggleForm"
+            v-on:reply-added="$emit('reply-added'); toggleForm();">
         </component>
     </div>
 </template>

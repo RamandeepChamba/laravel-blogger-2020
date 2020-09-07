@@ -31,5 +31,6 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/hello', 'HelloController@index');
 Route::resource('blogs', 'BlogController');
+Route::get('/blogs/{blog}/comments', 'BlogController@getComments');
 Route::resource('comments', 'CommentController');
 Route::get('/comments/{parent_id}/replies', 'CommentController@getReplies');

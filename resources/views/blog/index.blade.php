@@ -29,7 +29,7 @@
                             @if(auth()->user()->id === $blog->user_id)
                             <form action="/blogs/{{ $blog->id }}/edit" method="GET">
                                 @csrf
-                                <button type="submit" class="btn btn-secondary w-auto">Edit</button>
+                                <button type="submit" class="btn btn-warning w-auto">Edit</button>
                             </form>
                             <form action="/blogs/{{ $blog->id }}" method="POST">
                                 @method('DELETE')

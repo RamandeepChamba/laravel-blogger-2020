@@ -25,24 +25,9 @@
         <hr>
         <a href="#" class="btn btn-primary">Like</a><span class="ml-2">0</span>
         <hr>
-        <div class="row">
-            <h3>Comments {{count($comments)}}</h3>
-        </div>
-        <hr>
-        {{-- Comment Form --}}
-        <div class="row">
-            @include('comment.form')
-        </div>
-        {{-- Comments --}}
-        <hr>
-        {{-- 
-        <div class="row">
-            @include('comment.index', ['blog' => $blog])
-        </div>
-        --}}
         <comments-component
-            :comments="{{json_encode($comments)}}"
-            :auth-id="{{auth()->user() ? auth()->user()->id : -1}}">
+            :auth-id="{{auth()->user() ? auth()->user()->id : -1}}"
+            :blog-id="{{$blog->id}}">
         </comments-component>
     </div>
 @endsection

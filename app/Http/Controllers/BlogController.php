@@ -12,6 +12,7 @@ class BlogController extends Controller
     public function __construct()
     {
         $this->middleware('auth')->except(['index', 'show']);
+        $this->middleware('ajax')->only(['getComments']);
     }
 
     public function index()
@@ -40,9 +41,12 @@ class BlogController extends Controller
     public function show($blog_id)
     {
         $blog = Blog::findOrFail($blog_id);
+        
         $comments = $blog->comments()
             ->with('user:id,name')
+            ->withCount('replies')
             ->get()->toArray();
+        
         return view('blog.show', compact(['blog', 'comments']));
     }
 
@@ -80,6 +84,16 @@ class BlogController extends Controller
         }
         $blog->delete();
         return redirect('/blogs');
+    }
+
+    public function getComments($id)
+    {
+        $blog = Blog::findOrFail($id);
+        $comments = $blog->comments()
+            ->with('user:id,name')
+            ->withCount('replies')
+            ->get()->toArray();
+        return $comments;
     }
 
     protected function validatedData()

@@ -4,11 +4,9 @@
 
 # TODO
 
+* Notifications
 * Limited time message/alert on (un)successful update, delete etc. action
+* Highlight added, edited comments for few seconds 
 * Make user profile page
-* Make comments feature
-    * Show replies button (Number of replies, don't show if none)
-    * Edit
-    * Delete
-    * Cascade delete replies
-    * Make everything in comments fully Ajax
+* Make like feature for blogs and comments
+    * make it ajax
