@@ -1,6 +1,6 @@
 # Blogger
 
-### A blogging app made with laravel
+### A blogging app made with Laravel and Vue.js
 
 # TODO
 
@@ -10,3 +10,5 @@
 * Make user profile page
 * Make like feature for blogs and comments
     * make it ajax
+    * after login take user back to where they were
+    * cascade delete likes for both blog and comments

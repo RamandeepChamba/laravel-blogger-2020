@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use \Auth;
 use App\Blog;
 use App\Comment;
 use App\Events\CommentDeleted;
@@ -13,11 +14,9 @@ class CommentController extends Controller
     public function __construct()
     {
         $this->middleware('auth')->except(['getReplies']);
-        /*
         $this->middleware('ajax')->only(
             ['store', 'update', 'getReplies', 'destroy']
         );
-        */
     }
 
     public function store(Request $request)
@@ -39,8 +38,20 @@ class CommentController extends Controller
 
         $blog->comments()->save($comment);
         return Comment::where('id', '=', $comment->id)
-            ->with('user:id,name')
+            ->with([
+                'user:id,name', 
+                'likes' => function ($query) {
+                    // Don't know how to alias (likes AS userLiked)
+                    if(Auth::user()) {
+                        $query->where('user_id', '=', request()->user()->id);
+                    }
+                    else {
+                        $query->where('user_id', '=', -1);
+                    }
+                }
+            ])
             ->withCount('replies')
+            ->withCount('likes')
             ->first()->toJson();
     }
 
@@ -72,8 +83,20 @@ class CommentController extends Controller
     {
         $data = $this->validatedData();
         $comment = Comment::where('id', '=', $id)
-            ->with('user:id,name')
+            ->with([
+                'user:id,name', 
+                'likes' => function ($query) {
+                    // Don't know how to alias (likes AS userLiked)
+                    if(Auth::user()) {
+                        $query->where('user_id', '=', request()->user()->id);
+                    }
+                    else {
+                        $query->where('user_id', '=', -1);
+                    }
+                }
+            ])
             ->withCount('replies')
+            ->withCount('likes')
             ->first();
         $comment->comment = $data['comment'];
         $comment->save();
@@ -84,8 +107,20 @@ class CommentController extends Controller
     {
         $parent = Comment::findOrFail($parent_id);
         $replies = $parent->replies()
-            ->with('user:id,name')
+            ->with([
+                'user:id,name', 
+                'likes' => function ($query) {
+                    // Don't know how to alias (likes AS userLiked)
+                    if(Auth::user()) {
+                        $query->where('user_id', '=', request()->user()->id);
+                    }
+                    else {
+                        $query->where('user_id', '=', -1);
+                    }
+                }
+            ])
             ->withCount('replies')
+            ->withCount('likes')
             ->get()->toJson();
         return $replies;
     }

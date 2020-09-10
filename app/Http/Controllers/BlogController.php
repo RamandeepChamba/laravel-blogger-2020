@@ -11,7 +11,7 @@ class BlogController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->except(['index', 'show']);
+        $this->middleware('auth')->except(['index', 'show', 'getComments']);
         $this->middleware('ajax')->only(['getComments']);
     }
 
@@ -41,13 +41,21 @@ class BlogController extends Controller
     public function show($blog_id)
     {
         $blog = Blog::findOrFail($blog_id);
-        
-        $comments = $blog->comments()
-            ->with('user:id,name')
-            ->withCount('replies')
-            ->get()->toArray();
-        
-        return view('blog.show', compact(['blog', 'comments']));
+
+        // Check if blog liked by auth user
+        if (Auth::user() && $blog->likes()->count()) {
+            if ($blog->likes()->where('user_id', '=', Auth::user()->id)->first()) {
+                $liked = [1];
+            }
+            else {
+                $liked = [];
+            }
+        }
+        else {
+            $liked = [];
+        }
+        $liked = json_encode($liked);
+        return view('blog.show', compact(['blog', 'liked']));
     }
 
     public function edit($blog_id)
@@ -89,10 +97,24 @@ class BlogController extends Controller
     public function getComments($id)
     {
         $blog = Blog::findOrFail($id);
+        
         $comments = $blog->comments()
-            ->with('user:id,name')
-            ->withCount('replies')
-            ->get()->toArray();
+        ->with([
+            'user:id,name', 
+            'likes' => function ($query) {
+                // Don't know how to alias (likes AS userLiked)
+                if(Auth::user()) {
+                    $query->where('user_id', '=', request()->user()->id);
+                }
+                else {
+                    $query->where('user_id', '=', -1);
+                }
+            }
+        ])
+        ->withCount('replies')
+        ->withCount('likes')
+        ->get()->toArray();
+
         return $comments;
     }
 

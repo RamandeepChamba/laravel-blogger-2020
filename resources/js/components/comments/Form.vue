@@ -1,6 +1,8 @@
 <template>
     <div>
-        <form v-on:submit.prevent="addComment">
+        <form 
+            v-show="authId !== -1"
+            v-on:submit.prevent="addComment">
             <textarea v-model="comment" cols="70"
                 aria-describedby="commentHelp" 
                 placeholder="Write your opinion on this"
@@ -22,12 +24,17 @@
                 Cancel
             </button>
         </form>
+        <a 
+            v-show="authId === -1"
+            href="/login">
+            <button class="btn btn-primary">Login to comment</button>
+        </a>
     </div>
 </template>
 
 <script>
     export default {
-        props: ['blogId', 'parentId'],
+        props: ['blogId', 'parentId', 'authId'],
         
         data() {
             return {
@@ -68,7 +75,12 @@
                         this.processing = false
                     })
                     .catch((error) => {
-                        console.log(error)
+                        if(error.response.status === 401) {
+                            window.location = '/login';
+                        }
+                        else {
+                            console.log(error)
+                        }
                         this.processing = false
                     });
             }

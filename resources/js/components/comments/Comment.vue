@@ -23,9 +23,12 @@
                 <a href="#">{{comment.user.name}}</a>
                 <p>{{comment.comment}}</p>
                 <!-- Like Comment -->
-                <form action="#">
-                    <button type="submit" class="btn btn-primary">Like</button>
-                </form>
+                <like-component 
+                    :auth-id="authId"
+                    :comment-id="comment.id"
+                    :likes-count="likes"
+                    :is-liked="comment.likes">
+                </like-component>
                 <!-- Edit Comment -->
                 <button type="button" class="btn btn-warning" 
                     v-show="(authId === comment.user.id)"
@@ -42,6 +45,7 @@
                 <reply-form
                     :blog-id="comment.commentable_id"
                     :parent-id="comment.id"
+                    v-show="authId"
                     v-on:reply-added="replyAdded">
                 </reply-form>
                 <!-- Show Replies -->
@@ -73,7 +77,7 @@
     import EditForm from './EditForm';
     
     export default {
-        props: ['aComment', 'authId'],
+        props: ['aComment', 'authId',],
 
         data() {
             return {
@@ -82,6 +86,7 @@
                 hasReplies: false,
                 replies: [],
                 repliesCount: this.$props.aComment['replies_count'],
+                likes: this.$props.aComment['likes_count'],
                 repliesComponent: null,
                 editFormComponent: null,
                 editing: false,

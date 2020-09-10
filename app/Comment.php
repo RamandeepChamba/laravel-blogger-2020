@@ -22,4 +22,9 @@ class Comment extends Model
     {
         return $this->hasMany('App\Comment', 'parent_id');
     }
+
+    public function likes()
+    {
+        return $this->morphMany('App\Like', 'likeable');
+    }
 }

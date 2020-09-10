@@ -17,4 +17,9 @@ class Blog extends Model
     {
         return $this->morphMany('App\Comment', 'commentable')->whereNull('parent_id');
     }
+
+    public function likes()
+    {
+        return $this->morphMany('App\Like', 'likeable');
+    }
 }

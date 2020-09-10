@@ -8,6 +8,7 @@
         <!-- Comment Form -->
         <comment-form
             :blog-id="blogId"
+            :auth-id="authId"
             v-on:comment-added="commentAdded">
         </comment-form>
         <hr>

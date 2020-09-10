@@ -16,11 +16,6 @@
                                 <br>
                                 <cite>~{{ $blog->user->name }}</cite>
                             </div>
-            {{-- 
-                            <div class="card-body">
-                                <p>{{ $blog->content }}</p>
-                            </div>
-            --}}    
                             <p class="mb-0">
                                 <a href="/blogs/{{ $blog->id }}" 
                                     class="btn btn-primary w-auto">View</a>

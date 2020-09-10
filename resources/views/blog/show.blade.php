@@ -23,7 +23,12 @@
         </div>
 
         <hr>
-        <a href="#" class="btn btn-primary">Like</a><span class="ml-2">0</span>
+        <like-component 
+            :auth-id="{{auth()->user() ? auth()->user()->id : -1}}"
+            :blog-id="{{$blog->id}}"
+            :likes-count="{{$blog->likes()->count()}}"
+            :is-liked="{{$liked}}">
+        </like-component>
         <hr>
         <comments-component
             :auth-id="{{auth()->user() ? auth()->user()->id : -1}}"
