@@ -152,7 +152,7 @@
                     .then((response) => {
                         // Remove reply from UI
                         this.replies.splice(this.replies.findIndex(
-                            comment => comment.id === response.data
+                            comment => comment.id === response.data.comment.id
                         ), 1)
                         // Update reply count
                         this.repliesCount = this.replies.length

@@ -6,19 +6,21 @@ use Illuminate\Http\Request;
 use \Auth;
 use App\Blog;
 use App\Comment;
-use App\Events\CommentDeleted;
+use App\Traits\DeleteComment;
 
 class CommentController extends Controller
-{
+{    
+    use DeleteComment;
 
     public function __construct()
     {
         $this->middleware('auth')->except(['getReplies']);
         $this->middleware('ajax')->only(
-            ['store', 'update', 'getReplies', 'destroy']
+            ['store', 'update', 'getReplies']
         );
     }
 
+    // Create
     public function store(Request $request)
     {
         $data = $this->validatedData();
@@ -55,30 +57,13 @@ class CommentController extends Controller
             ->first()->toJson();
     }
 
+    // Delete
     public function destroy($id)
     {
-        $comment = Comment::findOrFail($id);
-        // Check if auth user has right
-        if ($comment->user_id !== auth()->user()->id) {
-            abort(401, "Not your comment");
-        }
-        $this->deleteWithReplies($id);
-        return $id;
+        return $this->deleteComment($id);
     }
 
-
-    private function deleteWithReplies($id)
-    {
-        $comment = Comment::findOrFail($id);
-
-        foreach ($comment->replies as $reply) {
-            $this->deleteWithReplies($reply->id);
-        }
-
-        $comment->delete();
-        return;
-    }
-
+    // Update
     public function update(Request $request, $id)
     {
         $data = $this->validatedData();
@@ -103,6 +88,7 @@ class CommentController extends Controller
         return $comment->toJson();
     }
 
+    // Get replies
     public function getReplies($parent_id)
     {
         $parent = Comment::findOrFail($parent_id);

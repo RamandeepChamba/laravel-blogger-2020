@@ -17,16 +17,21 @@
                                 <cite>~{{ $blog->user->name }}</cite>
                             </div>
                             <p class="mb-0">
-                                <a href="/blogs/{{ $blog->id }}" 
-                                    class="btn btn-primary w-auto">View</a>
+                                <a href="/blogs/{{ $blog->id }}" >
+                                    <button
+                                        class="btn btn-primary w-auto"
+                                        onclick="this.disabled=true;">
+                                        View
+                                    </button>
+                                </a>
                             </p>
                             @auth
                             @if(auth()->user()->id === $blog->user_id)
-                            <form action="/blogs/{{ $blog->id }}/edit" method="GET">
+                            <form action="/blogs/{{ $blog->id }}/edit" method="GET" class="disableButtonForm">
                                 @csrf
                                 <button type="submit" class="btn btn-warning w-auto">Edit</button>
                             </form>
-                            <form action="/blogs/{{ $blog->id }}" method="POST">
+                            <form action="/blogs/{{ $blog->id }}" method="POST" class="disableButtonForm">
                                 @method('DELETE')
                                 @csrf
                                 <button type="submit" class="btn btn-danger w-auto">Delete</button>

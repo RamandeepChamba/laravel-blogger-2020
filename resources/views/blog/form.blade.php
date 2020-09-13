@@ -1,6 +1,8 @@
 {{-- Add Blog Form --}}
-<form action="/blogs{{ isset($blog->id) ? ('/' . $blog->id) : null }}" 
-    method="POST">
+<form 
+	action="/blogs{{ isset($blog->id) ? ('/' . $blog->id) : null }}"
+	class="disableButtonForm"
+	method="POST">
     @method($method)
     @csrf
 
@@ -25,5 +27,7 @@
         {{ $message }}
     </div>
     @enderror
-    <button type="submit" class="btn btn-primary">{{ isset($blog->title) ? 'Edit' : 'Add' }}</button>
+		<button type="submit" class="btn btn-primary">
+      {{ isset($blog->title) ? 'Edit' : 'Add' }}
+    </button>
 </form>

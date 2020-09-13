@@ -76,7 +76,7 @@
                     .then((response) => {
                         // Remove comment from UI
                         this.comments.splice(this.comments.findIndex(
-                            comment => comment.id === response.data
+                            comment => comment.id === response.data.comment.id
                         ), 1)
                         this.processing = false
                     })

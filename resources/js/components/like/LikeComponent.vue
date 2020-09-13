@@ -85,7 +85,11 @@
                             window.location = '/login';
                         }
                         else {
-                            console.log(error)
+                            if (confirm(error + '\n Content got updated' + '\n Refresh the page?')) {
+                                location.reload()
+                            } else {
+                                0
+                            }
                         }
                         this.processing = false
                     });
@@ -93,6 +97,9 @@
             login() {
                 window.location = '/login'
             },
+            showAlert() {
+                console.log('alert')
+            }
         }
     }
 </script>

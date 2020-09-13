@@ -2105,7 +2105,7 @@ __webpack_require__.r(__webpack_exports__);
       axios["delete"]("/comments/".concat(id)).then(function (response) {
         // Remove reply from UI
         _this2.replies.splice(_this2.replies.findIndex(function (comment) {
-          return comment.id === response.data;
+          return comment.id === response.data.comment.id;
         }), 1); // Update reply count
 
 
@@ -2317,7 +2317,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       axios["delete"]("/comments/".concat(id)).then(function (response) {
         // Remove comment from UI
         _this2.comments.splice(_this2.comments.findIndex(function (comment) {
-          return comment.id === response.data;
+          return comment.id === response.data.comment.id;
         }), 1);
 
         _this2.processing = false;
@@ -2698,7 +2698,11 @@ __webpack_require__.r(__webpack_exports__);
         if (error.response && error.response.status === 401) {
           window.location = '/login';
         } else {
-          console.log(error);
+          if (confirm(error + '\n Content got updated' + '\n Refresh the page?')) {
+            location.reload();
+          } else {
+            0;
+          }
         }
 
         _this2.processing = false;
@@ -2706,6 +2710,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     login: function login() {
       window.location = '/login';
+    },
+    showAlert: function showAlert() {
+      console.log('alert');
     }
   }
 });

@@ -82,5 +82,24 @@
             @yield('content')
         </main>
     </div>
+    <script>
+        window.onload = function () {
+          document.querySelectorAll(".disableButtonForm").forEach(form => {
+            form.addEventListener('submit', disableButtonAndSubmit)
+          })
+        }
+				
+				// Prevent multiple form submits
+        function disableButtonAndSubmit(e) {
+					// Prevent form from submitting
+          e.preventDefault()
+					let btn = e.target.querySelector('button[type="submit"]')
+					// Disable submit button
+          btn.innerHTML = 'Working...'
+          btn.disabled = true
+					// Submit form
+          e.target.submit()
+        }
+    </script>
 </body>
 </html>

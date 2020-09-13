@@ -6,9 +6,12 @@ use Illuminate\Http\Request;
 use App\Blog;
 use App\Comment;
 use \Auth;
+use App\Traits\DeleteComment;
 
 class BlogController extends Controller
 {
+    use DeleteComment;
+
     public function __construct()
     {
         $this->middleware('auth')->except(['index', 'show', 'getComments']);
@@ -90,6 +93,13 @@ class BlogController extends Controller
         if ($blog->user_id !== Auth::id()) {
             abort(401, "Not your blog");
         }
+        // Delete likes
+        $blog->likes()->delete();
+        // Delete comments with likes and replies
+        foreach ($blog->comments as $comment) {
+            $this->deleteComment($comment->id, true);
+        }
+        // Delete blog
         $blog->delete();
         return redirect('/blogs');
     }
