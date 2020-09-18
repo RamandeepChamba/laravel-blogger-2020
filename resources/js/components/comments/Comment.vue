@@ -45,7 +45,7 @@
                 <reply-form
                     :blog-id="comment.commentable_id"
                     :parent-id="comment.id"
-                    v-show="authId"
+                    :auth-id="authId"
                     v-on:reply-added="replyAdded">
                 </reply-form>
                 <!-- Show Replies -->

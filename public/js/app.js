@@ -2570,7 +2570,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['blogId', 'parentId'],
+  props: ['blogId', 'parentId', 'authId'],
   components: {
     'reply-form': _Form__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
@@ -2582,6 +2582,11 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     toggleForm: function toggleForm() {
+      if (this.$props.authId === -1) {
+        window.location = '/login';
+        return;
+      }
+
       if (this.hasForm) {
         this.disableForm();
       } else {
@@ -2662,12 +2667,7 @@ __webpack_require__.r(__webpack_exports__);
         _this.likes = response.data.likesCount;
         _this.processing = false;
       })["catch"](function (error) {
-        if (error.response && error.response.status === 401) {
-          window.location = '/login';
-        } else {
-          console.log(error);
-        }
-
+        console.log(error);
         _this.processing = false;
       });
     },
@@ -39843,17 +39843,10 @@ var render = function() {
               ),
               _vm._v(" "),
               _c("reply-form", {
-                directives: [
-                  {
-                    name: "show",
-                    rawName: "v-show",
-                    value: _vm.authId,
-                    expression: "authId"
-                  }
-                ],
                 attrs: {
                   "blog-id": _vm.comment.commentable_id,
-                  "parent-id": _vm.comment.id
+                  "parent-id": _vm.comment.id,
+                  "auth-id": _vm.authId
                 },
                 on: { "reply-added": _vm.replyAdded }
               }),

@@ -19,7 +19,7 @@
     import Form from './Form'
 
     export default {
-        props: ['blogId','parentId'],
+        props: ['blogId','parentId', 'authId'],
         components: {
             'reply-form': Form
         },
@@ -33,6 +33,12 @@
 
         methods: {
             toggleForm: function () {
+
+                if(this.$props.authId === -1) {
+                    window.location = '/login'
+                    return
+                }
+
                 if (this.hasForm) {
                     this.disableForm()
                 }

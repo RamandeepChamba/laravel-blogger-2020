@@ -50,12 +50,7 @@
                         this.processing = false
                     })
                     .catch((error) => {
-                        if(error.response && error.response.status === 401) {
-                            window.location = '/login';
-                        }
-                        else {
-                            console.log(error)
-                        }
+                        console.log(error)
                         this.processing = false
                     });
             },
