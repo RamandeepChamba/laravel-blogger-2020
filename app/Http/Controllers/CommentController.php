@@ -42,6 +42,7 @@ class CommentController extends Controller
         return Comment::where('id', '=', $comment->id)
             ->with([
                 'user:id,name', 
+                'user.profile',
                 'likes' => function ($query) {
                     // Don't know how to alias (likes AS userLiked)
                     if(Auth::user()) {
@@ -70,6 +71,7 @@ class CommentController extends Controller
         $comment = Comment::where('id', '=', $id)
             ->with([
                 'user:id,name', 
+                'user.profile',
                 'likes' => function ($query) {
                     // Don't know how to alias (likes AS userLiked)
                     if(Auth::user()) {
@@ -95,6 +97,7 @@ class CommentController extends Controller
         $replies = $parent->replies()
             ->with([
                 'user:id,name', 
+                'user.profile',
                 'likes' => function ($query) {
                     // Don't know how to alias (likes AS userLiked)
                     if(Auth::user()) {

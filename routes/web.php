@@ -36,3 +36,6 @@ Route::resource('comments', 'CommentController');
 Route::get('/comments/{parent_id}/replies', 'CommentController@getReplies');
 Route::post('/likes', 'LikeController@store');
 Route::delete('/likes', 'LikeController@destroy');
+Route::resource('profiles', 'ProfileController');
+Route::get('/users/{user_id}/{blogs}', 'UserController@blogs');
+Route::delete('/users', 'UserController@destroy');

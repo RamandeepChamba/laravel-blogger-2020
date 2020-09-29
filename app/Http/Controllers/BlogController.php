@@ -6,11 +6,11 @@ use Illuminate\Http\Request;
 use App\Blog;
 use App\Comment;
 use \Auth;
-use App\Traits\DeleteComment;
+use App\Traits\DeleteBlog;
 
 class BlogController extends Controller
 {
-    use DeleteComment;
+    use DeleteBlog;
 
     public function __construct()
     {
@@ -88,19 +88,7 @@ class BlogController extends Controller
 
     public function destroy($id)
     {
-        $blog = Blog::findOrFail($id);
-        // Check if auth user has right
-        if ($blog->user_id !== Auth::id()) {
-            abort(401, "Not your blog");
-        }
-        // Delete likes
-        $blog->likes()->delete();
-        // Delete comments with likes and replies
-        foreach ($blog->comments as $comment) {
-            $this->deleteComment($comment->id, true);
-        }
-        // Delete blog
-        $blog->delete();
+        $this->deleteBlog($id);
         return redirect('/blogs');
     }
 
@@ -110,7 +98,8 @@ class BlogController extends Controller
         
         $comments = $blog->comments()
         ->with([
-            'user:id,name', 
+            'user:id,name',
+            'user.profile', 
             'likes' => function ($query) {
                 // Don't know how to alias (likes AS userLiked)
                 if(Auth::user()) {

@@ -14,7 +14,9 @@
                             <div class="card-header">
                                 <h3>{{ $blog->title }}</h3>
                                 <br>
-                                <cite>~{{ $blog->user->name }}</cite>
+                                <a href="{{ '/profiles/' . $blog->user->id }}">
+                                    ~{{ $blog->user->name }}
+                                </a>
                             </div>
                             <p class="mb-0">
                                 <a href="/blogs/{{ $blog->id }}" >

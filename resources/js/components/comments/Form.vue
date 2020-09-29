@@ -66,7 +66,7 @@
                     .then((response) => {
                         let comment = response.data
                         if(comment.parent_id) {
-                            this.$emit('reply-added')
+                            this.$emit('reply-added', comment.id)
                         }
                         else {
                             this.$emit('comment-added', comment)

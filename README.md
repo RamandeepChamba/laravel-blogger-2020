@@ -7,5 +7,5 @@
 * Notifications
 * Limited time message/alert on (un)successful update, delete etc. action
     * Flash messages
-* Highlight added, edited comments for few seconds 
-* Make user profile page
+* Make followers system
+* Make it look sexeh

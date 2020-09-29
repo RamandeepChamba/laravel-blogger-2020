@@ -10,7 +10,7 @@
             :blog-id="blogId"
             :parent-id="parentId"
             v-on:toggle-reply-form="toggleForm"
-            v-on:reply-added="$emit('reply-added'); toggleForm();">
+            v-on:reply-added="replyAdded($event); toggleForm($event);">
         </component>
     </div>
 </template>
@@ -53,6 +53,9 @@
             disableForm: function () {
                 this.replyForm = null
                 this.hasForm = false
+            },
+            replyAdded: function(id) {
+                this.$emit('reply-added', id)
             }
         }
     }

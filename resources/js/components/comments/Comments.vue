@@ -25,12 +25,13 @@
                     :key="comment.id"
                     :a-comment="comment"
                     :auth-id="authId"
+                    @hook:mounted="(highlightId === comment.id ? highlightReply(comment.id) : null)"
                     :ref="`comment-${comment.id}-component`"
                     v-on:delete-comment="$emit('delete-comment', comment.id)"
                     v-on:delete-reply="$emit('delete-reply', comment.id)">
                 </comment-component>
             </transition-group>
-                
+
         </ul>
     </div>
 </template>
@@ -39,9 +40,23 @@
     import Comment from './Comment'
 
     export default {
-        props: ['comments', 'authId'],
+        props: ['comments', 'authId', 'highlightId'],
         components: {
             'comment-component': Comment
+        },
+        methods: {
+            highlightReply(id) {
+                // Scroll to end (added reply)
+                let replyToFocus = this.
+                    $refs[`comment-${id}-component`][0].
+                    $refs[`comment-${id}`]
+                replyToFocus.scrollIntoView()
+                // Highlight reply
+                replyToFocus.parentElement.classList.add('highlight-add')
+                setTimeout(() => {
+                    replyToFocus.parentElement.classList.remove('highlight-add')    
+                }, 4000);
+            }
         },
     }
 </script>

@@ -61,6 +61,10 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    {{-- Profile --}}
+                                    <a class="dropdown-item" href="/profiles/{{Auth::user()->id}}">Profile</a>
+
+                                    {{-- Logout --}}
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
@@ -71,6 +75,7 @@
                                         @csrf
                                     </form>
                                 </div>
+
                             </li>
                         @endguest
                     </ul>
@@ -84,21 +89,21 @@
     </div>
     <script>
         window.onload = function () {
-          document.querySelectorAll(".disableButtonForm").forEach(form => {
-            form.addEventListener('submit', disableButtonAndSubmit)
-          })
+            document.querySelectorAll(".disableButtonForm").forEach(form => {
+                form.addEventListener('submit', disableButtonAndSubmit)
+            })
         }
 				
-				// Prevent multiple form submits
+        // Prevent multiple form submits
         function disableButtonAndSubmit(e) {
-					// Prevent form from submitting
-          e.preventDefault()
-					let btn = e.target.querySelector('button[type="submit"]')
-					// Disable submit button
-          btn.innerHTML = 'Working...'
-          btn.disabled = true
-					// Submit form
-          e.target.submit()
+            // Prevent form from submitting
+            e.preventDefault()
+            let btn = e.target.querySelector('button[type="submit"]')
+            // Disable submit button
+            btn.innerHTML = 'Working...'
+            btn.disabled = true
+            // Submit form
+            e.target.submit()
         }
     </script>
 </body>

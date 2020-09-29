@@ -1,12 +1,39 @@
 <style scoped>
+    @keyframes highlight-add {
+        0%   {background-color: default;}
+        50%  {background-color: #A9F09B;}
+        100%   {background-color: default;}
+    }
+
+    @keyframes highlight-edit {
+        0%   {background-color: default;}
+        50%  {background-color: #F2F38C;}
+        100%   {background-color: default;}
+    }
+
     .disabled {
         pointer-events: none;
+    }
+    .highlight-add {
+        animation-name: highlight-add;
+        animation-duration: 4s;
+    }
+    .highlight-edit {
+        animation-name: highlight-edit;
+        animation-duration: 4s;
+    }
+    .avatar-small {
+        vertical-align: middle;
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
     }
 </style>
 
 <template>
     <div :class="comment.parent_id ? 'my-2 ml-5' : ''">
-        <li class="list-group-item">
+        <li class="list-group-item"
+            :class="{'highlight-edit': highlightEdit}">
             <!-- Edit form -->
             <component
                 :is="editFormComponent"
@@ -17,11 +44,19 @@
             >
             </component>
             <!-- Comment -->
-            <div class="comment" :class="{'disabled': disabled}" v-show="!editing" 
+            <div class="comment" 
+                :class="{'disabled': disabled,}"
+                v-show="!editing" 
                 :ref="`comment-${comment.id}`">
                 <!-- Link to user profile -->
-                <a href="#">{{comment.user.name}}</a>
-                <p>{{comment.comment}}</p>
+                <a :href="`/profiles/${comment.user.id}`" class="d-flex align-items-stretch mb-3">
+                    <img :src="comment.user.profile.avatar" 
+                        class="d-flex mr-1 img-fluid img-thumbnail avatar-small" alt="avatar">
+                    <p class="d-flex align-self-center m-0">{{comment.user.name}}</p>
+                </a>
+                <hr>
+                <p class="preserve-space">{{comment.comment}}</p>
+                <hr>
                 <!-- Like Comment -->
                 <like-component 
                     :auth-id="authId"
@@ -65,6 +100,7 @@
             :is="repliesComponent"
             :comments="replies"
             :auth-id="authId"
+            :highlight-id="highlightReplyId"
             v-on:delete-reply="deleteReply"
         >
         </component>
@@ -90,7 +126,9 @@
                 repliesComponent: null,
                 editFormComponent: null,
                 editing: false,
-                disabled: false
+                disabled: false,
+                highlightReplyId: null,
+                highlightEdit: false
             }
         },
 
@@ -122,6 +160,7 @@
                         this.replies = response.data
                         this.hasReplies = true
                         this.repliesCount = this.replies.length
+                        this.highlightReplyId = this.replies[this.replies.length - 1].id
                         this.processing = false
                     })
                     .catch((error) => {
@@ -137,8 +176,11 @@
                 this.repliesComponent = null
                 this.replies = []
                 this.hasReplies = false
+                this.highlightReplyId = null
             },
-            replyAdded: function () {
+            replyAdded: function (id) {
+                // Highlight added reply
+                this.highlightReplyId = id
                 this.renderReplies()
             },
             deleteReply: function (id) {
@@ -200,6 +242,10 @@
                         this.replies.length = response.data['replies_count']
                         this.processing = false
                         this.removeEditForm()
+                        this.highlightEdit = true
+                        setTimeout(() => {
+                            this.highlightEdit = false    
+                        }, 4000);
                     })
                     .catch((error) => {
                         console.log(error)

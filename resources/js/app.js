@@ -22,6 +22,7 @@ window.Vue = require('vue');
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('comments-component', require('./components/comments/CommentsComponent.vue').default);
 Vue.component('like-component', require('./components/like/LikeComponent.vue').default);
+Vue.component('profile-component', require('./components/profile/ProfileComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

@@ -12,7 +12,12 @@
         </div>
 
         <div class="row">
-            <p class="ml-3">Author: {{ $blog->user->name }}</p>
+            <p class="ml-3">
+                Author: 
+                <a href="{{ '/profiles/' . $blog->user->id }}">
+                    {{ $blog->user->name }}
+                </a>
+            </p>
         </div>
 
         <hr>

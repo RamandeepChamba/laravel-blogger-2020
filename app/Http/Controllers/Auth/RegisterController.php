@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\User;
+use App\Profile;
 use App\Mail\WelcomeMail;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
@@ -73,6 +74,10 @@ class RegisterController extends Controller
         ]);
 
         $this->sendWelcomeMail($user);
+        // Create default profile
+        $profile = new Profile;
+        $user->profile()->save($profile);
+
         return $user;
     }
 

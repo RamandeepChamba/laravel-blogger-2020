@@ -1,3 +1,8 @@
+<style>
+    .preserve-space {
+        white-space: pre-wrap;
+    }
+</style>
 <template>
     <div>
         <!-- Comments counter -->
@@ -96,6 +101,11 @@
                     .$refs[`comment-${comment.id}-component`][0].
                     $refs[`comment-${comment.id}`]
                 commentToFocus.scrollIntoView()
+                // Highlight comment
+                commentToFocus.parentElement.classList.add('highlight-add')
+                setTimeout(() => {
+                    commentToFocus.parentElement.classList.remove('highlight-add')    
+                }, 4000);
             },
         }
     }
