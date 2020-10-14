@@ -39,3 +39,8 @@ Route::delete('/likes', 'LikeController@destroy');
 Route::resource('profiles', 'ProfileController');
 Route::get('/users/{user_id}/{blogs}', 'UserController@blogs');
 Route::delete('/users', 'UserController@destroy');
+Route::post('/followers/follow', 'FollowerController@follow');
+Route::post('/followers/unfollow', 'FollowerController@unfollow');
+Route::get('/followers/isFollowing/{leader_id}', 'FollowerController@isFollowing');
+Route::get('/followers/{leader_id}/followers', 'FollowerController@showFollowers');
+Route::get('/followers/{follower_id}/followings', 'FollowerController@showFollowings');

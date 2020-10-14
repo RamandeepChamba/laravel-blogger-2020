@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Profile;
+use App\Traits\FetchProfile;
 
 class ProfileController extends Controller
 {
+    use FetchProfile;
 
     public function __construct()
     {
@@ -79,13 +81,5 @@ class ProfileController extends Controller
         $response = (object)NULL;
         $response->profile = $profile;
         return json_encode($response);
-    }
-
-    protected function fetchProfile($user_id)
-    {
-        $profile = Profile::where('user_id', '=', $user_id)
-            ->with('user:id,name,email')
-            ->first();
-        return $profile;
     }
 }

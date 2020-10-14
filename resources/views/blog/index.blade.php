@@ -3,6 +3,13 @@
 @section('title', '| Blog | Explore')
 @section('content')
 <div class="container">
+    @if (Session::has('message'))
+    <flash-message-component
+        :flash-message="{{json_encode(Session::get('message'))}}"
+        :flash-class="{{json_encode(Session::get('flash-class'))}}"
+    >
+    </flash-message-component>
+    @endif
     <h1>Blogs</h1>
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -17,6 +24,11 @@
                                 <a href="{{ '/profiles/' . $blog->user->id }}">
                                     ~{{ $blog->user->name }}
                                 </a>
+                                @auth
+                                    @if (auth()->user()->id === $blog->user_id)
+                                        (you)
+                                    @endif
+                                @endauth
                             </div>
                             <p class="mb-0">
                                 <a href="/blogs/{{ $blog->id }}" >

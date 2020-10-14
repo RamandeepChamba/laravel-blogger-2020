@@ -1,6 +1,6 @@
 <template>
     <div
-        v-show="(likes > -1)" 
+        v-show="(likes > -1)"
         class="container m-0 p-0">
         <button
             class="btn"

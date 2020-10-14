@@ -38,6 +38,9 @@ class BlogController extends Controller
 
         $blog = Blog::create($data);
 
+        session()->flash('message', 'Blog added successfully!');
+        session()->flash('flash-class', 'success');
+
         return redirect('/blogs/' . $blog->id);
     }
 
@@ -82,13 +85,16 @@ class BlogController extends Controller
         }
 
         $blog->save();
-        
+        session()->flash('message', 'Blog updated successfully!');
+        session()->flash('flash-class', 'success');
         return redirect('/blogs/' . $blog_id);
     }
 
     public function destroy($id)
     {
         $this->deleteBlog($id);
+        session()->flash('message', 'Blog deleted successfully!');
+        session()->flash('flash-class', 'success');
         return redirect('/blogs');
     }
 

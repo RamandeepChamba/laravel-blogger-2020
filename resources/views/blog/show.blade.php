@@ -3,6 +3,15 @@
 @section('title', '| Blog | Show')
 @section('content')
     <div class="container">
+
+        @if (Session::has('message'))
+            <flash-message-component
+                :flash-message="{{json_encode(Session::get('message'))}}"
+                :flash-class="{{json_encode(Session::get('flash-class'))}}"
+            >
+            </flash-message-component>
+        @endif
+
         <div class="row">
             <h1>{{ $blog->title }}</h1>
         </div>

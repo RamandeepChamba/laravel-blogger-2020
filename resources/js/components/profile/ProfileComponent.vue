@@ -25,11 +25,42 @@
         >
         </component>
         <hr>
-        <h2 id="profile-name">{{profile.user.name}} 
-            <small v-show="hasPermission">(you)</small>
-        </h2>
+        <div class="d-flex align-items-center">
+            <h2 id="profile-name" class="mr-3">
+                {{profile.user.name}} 
+                <small v-show="hasPermission">(you)</small>
+            </h2>
+            <!-- Follow Button -->
+            <component
+                :is="followBtn"
+                :leader-id="profile.user.id"
+                :auth-id="authId"
+                @profile-updated="profileUpdated"
+            >
+            </component>
+        </div>
         <small id="profile-email">{{profile.user.email}}</small>
         <hr>
+        <p>
+            <a :href="`/followers/${authId}/followers`" 
+                v-show="(authId === profile.user.id)"
+            >
+                <strong>Followers: </strong>
+            </a>
+            <strong v-show="(authId !== profile.user.id)">Followers: </strong>
+            {{profile.user.followers_count}}
+        </p>
+        <p>
+            <a :href="`/followers/${authId}/followings`" 
+                v-show="(authId === profile.user.id)"
+            >
+                <strong>Following: </strong>
+            </a>
+            <strong v-show="(authId !== profile.user.id)">Following: </strong>
+            {{profile.user.followings_count}}
+        </p>
+        <hr>
+        <h3 class="mb-4">About</h3>
         <p id="profile-bio" v-show="!bioForm">
             {{profile.bio ? profile.bio : 'No bio given'}}
         </p>
@@ -49,17 +80,24 @@
         <hr>
         <!-- Link to blogs by this user -->
         <div>
-            <a :href="`/users/${profile.user.id}/blogs`" class="h2">Check Blogs</a>
+            <h3 class="mb-4">Blogs</h3>
+            <a :href="`/users/${profile.user.id}/blogs`" class="h4">--> Check Blogs</a>
         </div>
         <hr>
         <!-- Remove account button -->
-        <button class="btn btn-danger" @click="removeAccount">Remove account</button>
+        <button class="btn btn-danger" 
+            v-show="(authId === profile.user.id)"
+            @click="removeAccount"
+        >
+            Remove account
+        </button>
     </div>
 </template>
 
 <script>
     import AvatarForm from './AvatarForm'
     import BioForm from './BioForm'
+    import FollowBtn from './FollowBtn'
     
     export default {
         props: ['aProfile', 'authId'],
@@ -69,12 +107,14 @@
                 hasPermission: (this.$props.aProfile.user.id === this.$props.authId),
                 avatarForm: null,
                 bioForm: null,
+                followBtn: 'follow-btn',
                 processing: false
             }
         },
         components: {
             'avatar-form': AvatarForm,
             'bio-form': BioForm,
+            'follow-btn': FollowBtn,
         },
         methods: {
             showAvatarForm() {
@@ -109,9 +149,11 @@
                 axios.delete('/users')
                     .then((response) => {
                         window.location.href = '/login'
+                        this.processing = false
                     })
                     .catch((error) => {
                         console.log(error)
+                        this.processing = false
                     })
             }
         },
