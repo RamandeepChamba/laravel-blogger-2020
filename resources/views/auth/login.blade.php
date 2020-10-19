@@ -2,6 +2,13 @@
 
 @section('content')
 <div class="container">
+    @if (Session::has('message'))
+        <flash-message-component
+            :flash-message="{{json_encode(Session::get('message'))}}"
+            :flash-class="{{json_encode(Session::get('flash-class'))}}"
+        >
+        </flash-message-component>
+    @endif
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">

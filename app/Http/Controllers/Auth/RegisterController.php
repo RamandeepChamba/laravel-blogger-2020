@@ -76,8 +76,9 @@ class RegisterController extends Controller
         $this->sendWelcomeMail($user);
         // Create default profile
         $profile = new Profile;
+        $profile->avatar = 'https://i0.wp.com/www.mvhsoracle.com/wp-content/uploads/2018/08/default-avatar.jpg?ssl=1';
         $user->profile()->save($profile);
-
+        session()->flash('firstTimeLogin', true);
         return $user;
     }
 

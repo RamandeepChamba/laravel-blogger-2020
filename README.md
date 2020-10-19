@@ -5,13 +5,8 @@
 # TODO
 
 * Notifications
-* Limited time message/alert on (un)successful update, delete etc. action
-    * Flash messages
-        * After user deletes account
-        * After new user registers
-        * Should be used in layout template
-* Make followers system
-    * What's the purpose
-* Filter blogs
-    * Via followings
 * Make it look sexeh
+* Learn more eloquent
+    * groupBy etc.
+* You can use variable as method name
+    * `$this->{$key} = $value;`

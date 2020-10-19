@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Collection;
+use Illuminate\Pagination\Paginator; 
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,5 +27,18 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         //
+        if (!Collection::hasMacro('paginate')) {
+            Collection::macro('paginate', function ($perPage = 25, $page = null, $options = []) {
+                $options['path'] = $options['path'] ?? request()->path();
+                $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+                return new LengthAwarePaginator(
+                    $this->forPage($page, $perPage)->values(),
+                    $this->count(),
+                    $perPage,
+                    $page,
+                    $options
+                );
+            });
+        }
     }
 }

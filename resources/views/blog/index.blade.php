@@ -13,6 +13,12 @@
     <h1>Blogs</h1>
     <div class="row justify-content-center">
         <div class="col-md-8">
+            {{-- Filters --}}
+            <blogs-filter-component
+                :auth-id="{{auth()->user() ? auth()->user()->id : -1}}"
+                :blog-filters="{{json_encode($filters) ?? NULL}}"
+            >
+            </blogs-filter-component>
             {{-- Blogs list --}}
             <ul id="blogs" class="list-group">
                 @forelse ($blogs as $blog)
@@ -62,6 +68,8 @@
                     </li>
                 @endforelse
             </ul>
+            {{-- Pagination --}}
+            {{$blogs->withQueryString()->links()}}
         </div>
     </div>
 </div>

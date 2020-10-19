@@ -24,6 +24,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $firstTime = session('firstTimeLogin');
+        return view('home', compact('firstTime'));
     }
 }

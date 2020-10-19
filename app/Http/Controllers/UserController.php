@@ -43,6 +43,9 @@ class UserController extends Controller
         $response->user = $user;
         $user->delete();
 
+        session()->flash('message', 'Account deleted successfully!');
+        session()->flash('flash-class', 'success');
+
         return json_encode($response);
     }
 

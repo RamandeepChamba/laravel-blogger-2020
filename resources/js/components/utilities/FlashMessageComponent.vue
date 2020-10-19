@@ -1,6 +1,6 @@
 <template>
     <div class="container" v-if="!hide">
-        <div :class="`alert fade show alert-${flashClass}`" ref="alert">
+        <div :class="`alert fade show alert-${flashMsgClass}`" ref="alert">
             {{flashMessage}}
         </div>
     </div>
@@ -11,7 +11,8 @@
         props: ['flashMessage', 'flashClass'],
         data() {
             return {
-                hide: false
+                hide: false,
+                flashMsgClass: this.$props.flashClass ?? 'info',
             } 
         },
         mounted() {

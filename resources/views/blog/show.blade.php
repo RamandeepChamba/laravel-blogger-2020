@@ -3,7 +3,7 @@
 @section('title', '| Blog | Show')
 @section('content')
     <div class="container">
-
+        
         @if (Session::has('message'))
             <flash-message-component
                 :flash-message="{{json_encode(Session::get('message'))}}"
@@ -26,6 +26,11 @@
                 <a href="{{ '/profiles/' . $blog->user->id }}">
                     {{ $blog->user->name }}
                 </a>
+                @auth
+                    @if (auth()->user()->id === $blog->user_id)
+                        (you)
+                    @endif
+                @endauth
             </p>
         </div>
 
