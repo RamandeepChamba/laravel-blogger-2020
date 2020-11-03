@@ -20,7 +20,8 @@
             </div>
             <div class="form-group form-check" v-show="(authId !== -1)">
                 <input class="form-check-input" type="checkbox" 
-                    name="followingsOnly" id="followingsOnly" :checked="blogFilters.followingsOnly">
+                    name="followingsOnly" id="followingsOnly" 
+                    :checked="hasFilters && blogFilters.followingsOnly">
                 <label class="form-check-label" for="followingsOnly">
                     Followings only
                 </label>
@@ -47,12 +48,12 @@
             return {
                 processing: false,
                 filtering: false,
-                hasFilters: this.$props.blogFilters.sortBy 
-                    || this.$props.blogFilters.followingsOnly,
+                hasFilters: this.$props.blogFilters && (this.$props.blogFilters.sortBy 
+                    || this.$props.blogFilters.followingsOnly),
             }
         },
         mounted() {
-            if (this.$props.blogFilters.sortBy) {
+            if (this.hasFilters && this.$props.blogFilters.sortBy) {
                 document.getElementById('sortBy').value = this.$props.blogFilters.sortBy
             }
         },

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\Traits\FetchProfile;
+use App\Notifications\GainedFollower;
 
 class FollowerController extends Controller
 {
@@ -91,6 +92,8 @@ class FollowerController extends Controller
         
         if($action == 'follow') {
             $follower->followings()->attach($leader);
+            // Send notification to the leader
+            $leader->notify(new GainedFollower($follower));
         }
         else {
             $follower->followings()->detach($leader);

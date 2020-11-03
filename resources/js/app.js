@@ -25,6 +25,7 @@ Vue.component('like-component', require('./components/like/LikeComponent.vue').d
 Vue.component('profile-component', require('./components/profile/ProfileComponent.vue').default);
 Vue.component('flash-message-component', require('./components/utilities/FlashMessageComponent.vue').default);
 Vue.component('blogs-filter-component', require('./components/blogs/BlogsFilterComponent.vue').default);
+Vue.component('notifications-component', require('./components/notifications/NotificationsComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

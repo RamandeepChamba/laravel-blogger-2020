@@ -44,3 +44,4 @@ Route::post('/followers/unfollow', 'FollowerController@unfollow');
 Route::get('/followers/isFollowing/{leader_id}', 'FollowerController@isFollowing');
 Route::get('/followers/{leader_id}/followers', 'FollowerController@showFollowers');
 Route::get('/followers/{follower_id}/followings', 'FollowerController@showFollowings');
+Route::get('/notifications/{id}/markAsRead', 'NotificationController@markAsRead');

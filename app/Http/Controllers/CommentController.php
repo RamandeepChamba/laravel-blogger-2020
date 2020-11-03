@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use \Auth;
 use App\Blog;
+use App\User;
 use App\Comment;
 use App\Traits\DeleteComment;
+use App\Notifications\CommentAdded;
+use App\Notifications\ReplyAdded;
 
 class CommentController extends Controller
 {    
@@ -39,6 +42,21 @@ class CommentController extends Controller
         }
 
         $blog->comments()->save($comment);
+
+        // Send notification
+        if (isset($parentComment)) {
+            // Send notification to comment's author
+            $author = $parentComment->user;
+            $reply = $comment;
+            $replier = User::find(Auth::id());
+            $author->notify(new ReplyAdded($parentComment, $reply, $replier));
+        } else {
+            // Send notification to blog's author
+            $author = $blog->user;
+            $commenter = User::find(Auth::id());
+            $author->notify(new CommentAdded($blog, $comment, $commenter));
+        }
+        
         return Comment::where('id', '=', $comment->id)
             ->with([
                 'user:id,name', 

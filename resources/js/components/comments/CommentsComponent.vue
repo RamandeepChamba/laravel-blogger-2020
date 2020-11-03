@@ -22,6 +22,7 @@
             :v-show="comments.length"
             :comments="comments"
             :auth-id="authId"
+            :highlight-comment-node="highlightCommentNode"
             ref="comments-list"
             v-on:delete-comment="deleteComment">
         </comments-list>
@@ -34,7 +35,7 @@
     import Comments from './Comments'
 
     export default {
-        props: ['blogId', 'authId'],
+        props: ['blogId', 'authId', 'highlightCommentNode'],
 
         components: {
             'comments-counter': Counter,

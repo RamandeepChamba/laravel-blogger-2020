@@ -18,14 +18,22 @@
         <ul :id="comments[0] ? (!comments[0]['parent_id'] ? 'comments' : null) : null" 
             class="list-group"
             :class="comments[0] ? (comments[0]['parent_id'] ? 'replies' : null) : null">
-            
+
             <transition-group name="list" tag="p">
                 <comment-component
                     v-for="comment in comments"
                     :key="comment.id"
                     :a-comment="comment"
                     :auth-id="authId"
-                    @hook:mounted="(highlightId === comment.id ? highlightReply(comment.id) : null)"
+                    :highlight-comment-node="highlightCommentNode.includes(comment.id) 
+                        ? highlightCommentNode : []"
+                    @hook:mounted="(
+                        (
+                            (highlightCommentNode[highlightCommentNode.length - 1] === comment.id)
+                            || (highlightId  === comment.id) 
+                        )
+                        ? highlightReply(comment.id) : null
+                    )"
                     :ref="`comment-${comment.id}-component`"
                     v-on:delete-comment="$emit('delete-comment', comment.id)"
                     v-on:delete-reply="$emit('delete-reply', comment.id)">
@@ -40,7 +48,7 @@
     import Comment from './Comment'
 
     export default {
-        props: ['comments', 'authId', 'highlightId'],
+        props: ['comments', 'authId', 'highlightId', 'highlightCommentNode'],
         components: {
             'comment-component': Comment
         },
@@ -56,7 +64,7 @@
                 setTimeout(() => {
                     replyToFocus.parentElement.classList.remove('highlight-add')    
                 }, 4000);
-            }
+            },
         },
     }
 </script>

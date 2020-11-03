@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 use App\Like;
 use App\Blog;
 use App\Comment;
+use App\User;
+use App\Notifications\BlogLiked;
+use App\Notifications\CommentLiked;
+use Illuminate\Support\Facades\Auth;
 
 class LikeController extends Controller
 {
@@ -21,9 +25,17 @@ class LikeController extends Controller
         // Can't use variable as classname because of ''
         if($data->type === 'blog') {
             $likeable = Blog::findOrFail($data->id);
+            // Send notification to blog's author
+            $author = $likeable->user;
+            $liker = User::find(Auth::id());
+            $author->notify(new BlogLiked($likeable, $liker));
         }
         else if ($data->type === 'comment') {
             $likeable = Comment::findOrFail($data->id);
+            // Send notification to comment's author
+            $author = $likeable->user;
+            $liker = User::find(Auth::id());
+            $author->notify(new CommentLiked($likeable, $liker));
         }
         $like = new Like;
         $like->user()->associate($request->user());

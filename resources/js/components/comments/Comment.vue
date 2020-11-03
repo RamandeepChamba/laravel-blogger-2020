@@ -101,6 +101,7 @@
             :comments="replies"
             :auth-id="authId"
             :highlight-id="highlightReplyId"
+            :highlight-comment-node="highlightTree ? highlightTree : []"
             v-on:delete-reply="deleteReply"
         >
         </component>
@@ -113,7 +114,7 @@
     import EditForm from './EditForm';
     
     export default {
-        props: ['aComment', 'authId',],
+        props: ['aComment', 'authId', 'highlightCommentNode'],
 
         data() {
             return {
@@ -128,7 +129,8 @@
                 editing: false,
                 disabled: false,
                 highlightReplyId: null,
-                highlightEdit: false
+                highlightEdit: false,
+                highlightTree: this.$props.highlightCommentNode
             }
         },
 
@@ -136,6 +138,16 @@
             'reply-form': ReplyForm,
             Comments,
             'edit-form': EditForm,
+        },
+
+        mounted() {
+            if(this.highlightTree.length
+                && this.highlightTree[this.highlightTree.length - 1] === this.comment.id 
+                && this.highlightTree.length !== 1) 
+            {
+                // Render replies
+                this.renderReplies()
+            }
         },
 
         methods: {
@@ -160,7 +172,20 @@
                         this.replies = response.data
                         this.hasReplies = true
                         this.repliesCount = this.replies.length
-                        this.highlightReplyId = this.replies[this.replies.length - 1].id
+                        
+                        if(this.highlightTree.length) {
+                            this.highlightTree.pop()
+                        }
+
+                        if (this.highlightTree.length
+                            && this.replies.find(el => 
+                            el.id === this.highlightTree[this.highlightTree.length - 1])) 
+                        {
+                            this.highlightReplyId = this.highlightTree[this.highlightTree.length - 1]
+                        } else {
+                            this.highlightReplyId = this.replies[this.replies.length - 1].id
+                        }
+                        
                         this.processing = false
                     })
                     .catch((error) => {

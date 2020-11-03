@@ -51,7 +51,8 @@
         <hr>
         <comments-component
             :auth-id="{{auth()->user() ? auth()->user()->id : -1}}"
-            :blog-id="{{$blog->id}}">
+            :blog-id="{{$blog->id}}"
+            :highlight-comment-node="{{$highlightCommentNode}}">
         </comments-component>
     </div>
 @endsection

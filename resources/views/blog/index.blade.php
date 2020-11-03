@@ -16,7 +16,7 @@
             {{-- Filters --}}
             <blogs-filter-component
                 :auth-id="{{auth()->user() ? auth()->user()->id : -1}}"
-                :blog-filters="{{json_encode($filters) ?? NULL}}"
+                :blog-filters="{{json_encode($filters ?? NULL)}}"
             >
             </blogs-filter-component>
             {{-- Blogs list --}}
@@ -69,7 +69,7 @@
                 @endforelse
             </ul>
             {{-- Pagination --}}
-            {{$blogs->withQueryString()->links()}}
+            {{isset($filters) ? $blogs->withQueryString()->links() : null}}
         </div>
     </div>
 </div>

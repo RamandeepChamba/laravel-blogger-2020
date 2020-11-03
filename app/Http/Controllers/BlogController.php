@@ -8,6 +8,7 @@ use App\Comment;
 use App\User;
 use \Auth;
 use App\Traits\DeleteBlog;
+use App\Notifications\FollowingAddedBlog;
 
 class BlogController extends Controller
 {
@@ -93,6 +94,12 @@ class BlogController extends Controller
 
         $blog = Blog::create($data);
 
+        // Notify all the followers
+        $leader = Auth::user();
+        foreach ($leader->followers as $follower) {
+            $follower->notify(new FollowingAddedBlog($leader, $blog));
+        }
+
         session()->flash('message', 'Blog added successfully!');
         session()->flash('flash-class', 'success');
 
@@ -115,8 +122,16 @@ class BlogController extends Controller
         else {
             $liked = [];
         }
+
+        $commentNode = [];
+        if(request('highlightedComment')) {
+            $commentNode = array_merge($commentNode,
+                $this->commentParentNode(request('highlightedComment')));
+        }
+        $highlightCommentNode = json_encode($commentNode);
+
         $liked = json_encode($liked);
-        return view('blog.show', compact(['blog', 'liked']));
+        return view('blog.show', compact(['blog', 'liked', 'highlightCommentNode']));
     }
 
     public function edit($blog_id)
@@ -176,6 +191,20 @@ class BlogController extends Controller
         ->get()->toArray();
 
         return $comments;
+    }
+
+    protected function commentParentNode($id)
+    {
+        $comment = Comment::find($id);
+        $commentNode = [];
+        if ($comment) {
+            $commentNode[] = $comment->id;
+            if($comment->parent_id) {
+                $commentNode = array_merge($commentNode, 
+                    $this->commentParentNode($comment->parent_id));
+            }
+        }
+        return $commentNode;
     }
 
     protected function validatedData()
