@@ -8,11 +8,13 @@ use App\Blog;
 use App\User;
 use App\Traits\DeleteBlog;
 use App\Traits\DeleteComment;
+use App\Traits\FilterBlogs;
 
 class UserController extends Controller
 {
     use DeleteBlog;
     use DeleteComment;
+    use FilterBlogs;
 
     public function __construct()
     {
@@ -53,6 +55,10 @@ class UserController extends Controller
     {
         $blogs = Blog::where('user_id', '=', $user_id)->get();
 
-        return view('blog.index', $data = compact('blogs'));
+        $data = $this->filterBlogs($blogs);
+        $blogs = $data['blogs'];
+        $filters = $data['filters'];
+        $blogs = $blogs->paginate(2);
+        return view('blog.index', $data = compact(['blogs', 'filters']));
     }
 }

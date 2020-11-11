@@ -9,7 +9,7 @@
             {{hasFilters ? 'Filtered result' : 'Filter'}}
         </button>
 
-        <form action="/blogs" v-show="filtering" method="GET">
+        <form :action="urlPath" v-show="filtering" method="GET">
             <div class="form-group">
                 <label for="sortBy">Sort By</label>
                 <select class="form-control" name="sortBy" id="sortBy">
@@ -26,7 +26,7 @@
                     Followings only
                 </label>
             </div>
-            <a href="/blogs">
+            <a :href="urlPath">
                 <button class="btn btn-warning" type="button">
                     Reset
                 </button>
@@ -43,7 +43,7 @@
 
 <script>
     export default {
-        props: ['authId', 'blogFilters'],
+        props: ['authId', 'blogFilters', 'urlPath'],
         data() {
             return {
                 processing: false,

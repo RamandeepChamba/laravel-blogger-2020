@@ -8,11 +8,13 @@ use App\Comment;
 use App\User;
 use \Auth;
 use App\Traits\DeleteBlog;
+use App\Traits\FilterBlogs;
 use App\Notifications\FollowingAddedBlog;
 
 class BlogController extends Controller
 {
     use DeleteBlog;
+    use FilterBlogs;
 
     public function __construct()
     {
@@ -23,60 +25,11 @@ class BlogController extends Controller
     public function index()
     {
         $blogs = Blog::all();
-        $filters = (object)NULL;
         
-        if($blogs->count()) {
-            // Recent first
-            $blogs = $blogs->toQuery()->latest()->get();
-        }
+        $data = $this->filterBlogs($blogs);
+        $blogs = $data['blogs'];
+        $filters = $data['filters'];
 
-        if(request('followingsOnly')) {
-            $filters->followingsOnly = true;
-            // Filter by followings only blogs
-            $followings = User::find(Auth::id())->followings;
-
-            if($followings->count()) {
-                $followings = $followings->toQuery()
-                    ->select('id')->get()->toArray();
-
-                $followings = array_map(
-                    function($user) {
-                        return $user['id'];
-                    },
-                    $followings);
-
-                $blogs = $blogs->toQuery()
-                    ->withCount('likes')->get()->whereIn('user_id', $followings);    
-            }
-            else {
-                $blogs = collect([]);
-            }
-        }
-
-        if(request('sortBy')) {
-            $filters->sortBy = request('sortBy');
-            // Sort by likes count (popular)
-            if(request('sortBy') === 'popular') {
-                if($blogs->count()) {
-                    $blogs = $blogs->toQuery()
-                        ->withCount('likes')
-                        ->orderBy('likes_count', 'DESC')
-                        ->orderBy('created_at', 'DESC');
-                }
-            }
-            // Sort by recent (default)
-            elseif(request('sortBy') === 'latest') {
-                if($blogs->count()) {
-                    $blogs = $blogs->toQuery()->latest()->get();
-                }
-            }
-            // Sort by oldest
-            elseif(request('sortBy') === 'oldest') {
-                if($blogs->count()) {
-                    $blogs = $blogs->toQuery()->oldest()->get();
-                }
-            }
-        }
         $blogs = $blogs->paginate(2);
         return view('blog.index', $data = compact(['blogs', 'filters']));
     }

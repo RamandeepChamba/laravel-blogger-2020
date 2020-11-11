@@ -11,12 +11,17 @@
     </flash-message-component>
     @endif
     <h1>Blogs</h1>
+    @php
+        $url = url()->current();
+        $urlPath = parse_url($url)['path']
+    @endphp
     <div class="row justify-content-center">
         <div class="col-md-8">
             {{-- Filters --}}
             <blogs-filter-component
                 :auth-id="{{auth()->user() ? auth()->user()->id : -1}}"
                 :blog-filters="{{json_encode($filters ?? NULL)}}"
+                :url-path="{{json_encode($urlPath)}}"
             >
             </blogs-filter-component>
             {{-- Blogs list --}}

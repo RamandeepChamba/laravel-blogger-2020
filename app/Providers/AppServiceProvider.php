@@ -26,17 +26,28 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        /**
+         * Paginate a standard Laravel Collection.
+         *
+         * @param int $perPage
+         * @param int $total
+         * @param int $page
+         * @param string $pageName
+         * @return array
+         */
         if (!Collection::hasMacro('paginate')) {
-            Collection::macro('paginate', function ($perPage = 25, $page = null, $options = []) {
-                $options['path'] = $options['path'] ?? request()->path();
-                $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+            Collection::macro('paginate', function($perPage, $total = null, $page = null, $pageName = 'page') {
+                $page = $page ?: LengthAwarePaginator::resolveCurrentPage($pageName);
+    
                 return new LengthAwarePaginator(
-                    $this->forPage($page, $perPage)->values(),
-                    $this->count(),
+                    $this->forPage($page, $perPage),
+                    $total ?: $this->count(),
                     $perPage,
                     $page,
-                    $options
+                    [
+                        'path' => LengthAwarePaginator::resolveCurrentPath(),
+                        'pageName' => $pageName,
+                    ]
                 );
             });
         }
