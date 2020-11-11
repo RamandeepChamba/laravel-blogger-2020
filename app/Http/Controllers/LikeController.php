@@ -26,16 +26,22 @@ class LikeController extends Controller
         if($data->type === 'blog') {
             $likeable = Blog::findOrFail($data->id);
             // Send notification to blog's author
-            $author = $likeable->user;
             $liker = User::find(Auth::id());
-            $author->notify(new BlogLiked($likeable, $liker));
+            $author = $likeable->user;
+
+            if($author->id !== $liker->id) {
+                $author->notify(new BlogLiked($likeable, $liker));
+            }   
         }
         else if ($data->type === 'comment') {
             $likeable = Comment::findOrFail($data->id);
             // Send notification to comment's author
             $author = $likeable->user;
             $liker = User::find(Auth::id());
-            $author->notify(new CommentLiked($likeable, $liker));
+            
+            if($author->id !== $liker->id) {
+                $author->notify(new CommentLiked($likeable, $liker));
+            }
         }
         $like = new Like;
         $like->user()->associate($request->user());

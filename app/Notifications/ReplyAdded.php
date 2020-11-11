@@ -8,10 +8,12 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use App\User;
 use App\Comment;
+use App\Traits\MakeNotification;
 
 class ReplyAdded extends Notification
 {
     use Queueable;
+    use MakeNotification;
 
     /**
      * Create a new notification instance.
@@ -33,7 +35,7 @@ class ReplyAdded extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['database', 'broadcast'];
     }
 
     /**
@@ -50,7 +52,7 @@ class ReplyAdded extends Notification
                     ->line('Thank you for using our application!');
     }
 
-    public function toDatabase($notifiable)
+    public function prepareData($notifiable)
     {
         $parentComment = (object)NULL;
         $blog = (object)NULL;

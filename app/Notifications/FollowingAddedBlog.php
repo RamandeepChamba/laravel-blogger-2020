@@ -6,17 +6,21 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use App\User;
+use App\Blog;
+use App\Traits\MakeNotification;
 
 class FollowingAddedBlog extends Notification
 {
     use Queueable;
+    use MakeNotification;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($leader, $blog)
+    public function __construct(User $leader, Blog $blog)
     {
         $this->leader = $leader;
         $this->blog = $blog;
@@ -30,7 +34,7 @@ class FollowingAddedBlog extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['database', 'broadcast'];
     }
 
     /**
@@ -47,7 +51,7 @@ class FollowingAddedBlog extends Notification
                     ->line('Thank you for using our application!');
     }
 
-    public function toDatabase($notifiable)
+    public function prepareData($notifiable)
     {
         $leader = (object)NULL;
         $blog = (object)NULL;

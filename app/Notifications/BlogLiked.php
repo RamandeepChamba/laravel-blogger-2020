@@ -5,13 +5,16 @@ namespace App\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Notification;
 use App\User;
 use App\Blog;
+use App\Traits\MakeNotification;
 
 class BlogLiked extends Notification
 {
     use Queueable;
+    use MakeNotification;
 
     /**
      * Create a new notification instance.
@@ -32,7 +35,7 @@ class BlogLiked extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['database', 'broadcast'];
     }
 
     /**
@@ -49,7 +52,7 @@ class BlogLiked extends Notification
                     ->line('Thank you for using our application!');
     }
 
-    public function toDatabase($notifiable)
+    private function prepareData($notifiable)
     {
         $blog = (object)NULL;
         $liker = (object)NULL;

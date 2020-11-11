@@ -4,8 +4,8 @@
 
 # TODO
 
-* Notifications
-    * toBroadcast
+* Broadcasting
+    * change elements in realtime (likes , comments count)
 * Make it look sexeh
 * Learn more eloquent
     * groupBy etc.
