@@ -3,6 +3,7 @@
 /public/storage
 /public/js/*
 /public/css/*
+laravel-echo-server.lock
 /storage/*.key
 /vendor
 .env
