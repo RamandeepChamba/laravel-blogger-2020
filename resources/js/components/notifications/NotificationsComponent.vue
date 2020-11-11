@@ -35,7 +35,7 @@
     import FollowingAddedBlogNotification from './FollowingAddedBlogNotification'
 
     export default {
-        props: ['myNotifications'],
+        props: ['myNotifications', 'authId'],
         data() {
             return {
                 processing: false,
@@ -49,6 +49,14 @@
             ReplyAddedNotification,
             GainedFollowerNotification,
             FollowingAddedBlogNotification,
+        },
+        mounted() {
+            
+            Echo.private(`App.User.${this.$props.authId}`)
+                .notification((notification) => {
+                    this.notifications.push(notification)
+                });
+            
         },
         methods: {
             getNotificationType(type) {

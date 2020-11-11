@@ -49,12 +49,18 @@ class CommentController extends Controller
             $author = $parentComment->user;
             $reply = $comment;
             $replier = User::find(Auth::id());
-            $author->notify(new ReplyAdded($parentComment, $reply, $replier));
+
+            if($author->id !== $replier->id) {
+                $author->notify(new ReplyAdded($parentComment, $reply, $replier));
+            }
         } else {
             // Send notification to blog's author
             $author = $blog->user;
             $commenter = User::find(Auth::id());
-            $author->notify(new CommentAdded($blog, $comment, $commenter));
+
+            if($author->id !== $commenter->id) {
+                $author->notify(new CommentAdded($blog, $comment, $commenter));
+            }
         }
         
         return Comment::where('id', '=', $comment->id)

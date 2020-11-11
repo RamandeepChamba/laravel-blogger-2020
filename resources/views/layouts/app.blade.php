@@ -9,15 +9,13 @@
 
     <title>{{ config('app.name', 'Laravel') }} @yield('title')</title>
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
-
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    @stack('styles')
 </head>
 <body>
     <div id="app">
@@ -30,6 +28,7 @@
                     {{-- Notifications --}}
                     <notifications-component
                         :my-notifications="{{ json_encode(Auth::user()->notifications) }}"
+                        :auth-id="{{ json_encode(Auth::user()->id)}}"
                     >
                     </notifications-component>
                 @endauth
@@ -62,6 +61,8 @@
                             <li class="nav-item">
                                 <a href="/blogs/create" class="nav-link">Add blog</a>
                             </li>
+
+                            @stack('nav-links-auth-right')
                                 
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" 
@@ -96,6 +97,8 @@
             @yield('content')
         </main>
     </div>
+    <!-- Scripts -->
+    <script src="{{ asset('js/app.js') }}"></script>
     <script>
         window.onload = function () {
             document.querySelectorAll(".disableButtonForm").forEach(form => {
