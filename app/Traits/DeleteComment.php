@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use App\Comment;
+use App\Events\BlogUpdated as BlogUpdatedEvent;
 
 trait DeleteComment {
     public function deleteComment($id, $blogBeingDeleted = false)
@@ -13,7 +14,9 @@ trait DeleteComment {
             abort(401, "Not your comment");
         }
         // Delete comment and replies
-        return $this->deleteWithReplies($id);
+        $response = $this->deleteWithReplies($id);
+        BlogUpdatedEvent::dispatch($comment->commentable_id, $comment->user_id);
+        return $response;
     }
 
     public function deleteWithReplies($id)

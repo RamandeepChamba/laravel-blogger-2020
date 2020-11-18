@@ -4,8 +4,9 @@
 
 # TODO
 
-* Broadcasting
-    * change elements in realtime (likes , comments count)
+* Notifications
+    * remove duplications
+    * Mark all as read button
 * Make it look sexeh
 * Learn more eloquent
     * groupBy etc.

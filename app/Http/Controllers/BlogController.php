@@ -10,6 +10,7 @@ use \Auth;
 use App\Traits\DeleteBlog;
 use App\Traits\FilterBlogs;
 use App\Notifications\FollowingAddedBlog;
+use App\Events\BlogUpdated as BlogUpdatedEvent;
 
 class BlogController extends Controller
 {
@@ -110,6 +111,8 @@ class BlogController extends Controller
         $blog->save();
         session()->flash('message', 'Blog updated successfully!');
         session()->flash('flash-class', 'success');
+        // Broadcast updation of blog
+        BlogUpdatedEvent::dispatch($blog_id);
         return redirect('/blogs/' . $blog_id);
     }
 

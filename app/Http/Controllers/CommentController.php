@@ -8,12 +8,15 @@ use App\Blog;
 use App\User;
 use App\Comment;
 use App\Traits\DeleteComment;
+use App\Traits\PrettyComment;
 use App\Notifications\CommentAdded;
 use App\Notifications\ReplyAdded;
+use App\Events\BlogUpdated as BlogUpdatedEvent;
 
 class CommentController extends Controller
 {    
     use DeleteComment;
+    use PrettyComment;
 
     public function __construct()
     {
@@ -62,24 +65,8 @@ class CommentController extends Controller
                 $author->notify(new CommentAdded($blog, $comment, $commenter));
             }
         }
-        
-        return Comment::where('id', '=', $comment->id)
-            ->with([
-                'user:id,name', 
-                'user.profile',
-                'likes' => function ($query) {
-                    // Don't know how to alias (likes AS userLiked)
-                    if(Auth::user()) {
-                        $query->where('user_id', '=', request()->user()->id);
-                    }
-                    else {
-                        $query->where('user_id', '=', -1);
-                    }
-                }
-            ])
-            ->withCount('replies')
-            ->withCount('likes')
-            ->first()->toJson();
+        BlogUpdatedEvent::dispatch($blog->id, $comment->user_id);
+        return $this->prettyComment($comment->id)->toJson();
     }
 
     // Delete
@@ -111,6 +98,7 @@ class CommentController extends Controller
             ->first();
         $comment->comment = $data['comment'];
         $comment->save();
+        BlogUpdatedEvent::dispatch($comment->commentable_id, $comment->user_id);
         return $comment->toJson();
     }
 

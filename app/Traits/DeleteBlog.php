@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use App\Blog;
+use App\Events\BlogUpdated as BlogUpdatedEvent;
 
 trait DeleteBlog {
 
@@ -22,7 +23,10 @@ trait DeleteBlog {
             $this->deleteComment($comment->id, true);
         }
         // Delete blog
-        return json_encode($blog->delete());
+        $blog = $blog->delete();
+        // Broadcast deletion of blog
+        BlogUpdatedEvent::dispatch($id);
+        return json_encode($blog);
     }
 }
 ?>

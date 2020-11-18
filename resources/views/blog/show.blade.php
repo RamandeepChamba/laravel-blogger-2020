@@ -1,6 +1,10 @@
 @extends('layouts.app')
 
 @section('title', '| Blog | Show')
+@php
+    $flashData = [];
+    $flashData['blogId'] = $blog->id;
+@endphp
 @section('content')
     <div class="container">
         
@@ -11,6 +15,13 @@
             >
             </flash-message-component>
         @endif
+        
+        <flash-message-component
+            :flash-type="{{json_encode('broadcast')}}"
+            :flash-data="{{json_encode($flashData)}}"
+            :auth-id="{{auth()->user() ? auth()->user()->id : -1}}"
+        >
+        </flash-message-component>
 
         <div class="row">
             <h1>{{ $blog->title }}</h1>
