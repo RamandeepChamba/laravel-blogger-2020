@@ -9,6 +9,14 @@
             <div class="dropdown-item" v-show="!notifications.length">
                 <p>No new notifications</p>
             </div>
+            <div class="dropdown-item d-flex justify-content-end mb-3" 
+                v-show="(notifications.length >= 2)">
+                <button class="btn btn-warning" type="button"
+                    @click="markAllAsRead"
+                >
+                    mark all as read
+                </button>
+            </div>
             <div class="dropdown-item"
                 v-show="notifications.length"
                 v-for="(notification, index) in notifications"
@@ -73,6 +81,22 @@
                 this.processing = true
 
                 axios.get(`/notifications/${id}/markAsRead`)
+                    .then((response) => {
+                        this.notifications = response.data.notifications ?? []
+                        this.processing = false
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                        this.processing = false
+                    });
+            },
+            markAllAsRead() {
+                if(this.processing) {
+                    return
+                }
+                this.processing = true
+
+                axios.get(`/notifications/markAllAsRead`)
                     .then((response) => {
                         this.notifications = response.data.notifications ?? []
                         this.processing = false

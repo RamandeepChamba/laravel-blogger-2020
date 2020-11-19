@@ -32,4 +32,13 @@ class NotificationController extends Controller
         $response->notifications = $user->unreadNotifications;
         return json_encode($response);
     }
+
+    public function markAllAsRead()
+    {
+        $user = User::find(request()->user()->id);
+        // Mark all as read
+        $user->unreadNotifications->markAsRead();
+
+        return 1;
+    }
 }
