@@ -52,7 +52,7 @@ class ReplyAdded extends Notification
                     ->line('Thank you for using our application!');
     }
 
-    public function prepareData($notifiable)
+    public function prepareMyData($notifiable)
     {
         $parentComment = (object)NULL;
         $blog = (object)NULL;
