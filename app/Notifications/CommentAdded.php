@@ -53,7 +53,7 @@ class CommentAdded extends Notification
                     ->line('Thank you for using our application!');
     }
 
-    public function prepareData($notifiable)
+    public function prepareMyData($notifiable)
     {
         $blog = (object)NULL;
         $comment = (object)NULL;

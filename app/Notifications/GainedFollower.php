@@ -8,11 +8,13 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use App\User;
 use App\Traits\MakeNotification;
+use App\Traits\Notifications\PrepareData\GainedFollower as PrepareData;
 
 class GainedFollower extends Notification
 {
     use Queueable;
     use MakeNotification;
+    use PrepareData;
 
     /**
      * Create a new notification instance.
@@ -49,16 +51,9 @@ class GainedFollower extends Notification
                     ->line('Thank you for using our application!');
     }
 
-    public function prepareData($notifiable)
+    public function prepareMyData($notifiable)
     {
-        $follower = (object)NULL;
-
-        $follower->id = $this->follower->id;
-        $follower->name = $this->follower->name;
-
-        return [
-            'follower' => $follower
-        ];
+        return $this->prepareData($notifiable, $this->follower);
     }
 
     /**

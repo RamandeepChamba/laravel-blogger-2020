@@ -10,9 +10,18 @@ use App\User;
 use App\Notifications\BlogLiked;
 use App\Notifications\CommentLiked;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use App\Traits\Notifications\PrepareData\BlogLiked as PDForBlogLiked;
+use App\Traits\Notifications\PrepareData\CommentLiked as PDForCommentLiked;
 
 class LikeController extends Controller
 {
+    use PDForBlogLiked, PDForCommentLiked {
+        PDForBlogLiked::prepareData insteadOf PDForCommentLiked;
+        PDForBlogLiked::prepareData as pDForBlogLiked;
+        PDForCommentLiked::prepareData as pDForCommentLiked;
+    }
+    
     public function __construct()
     {
         $this->middleware(['auth'])->except(['getLikes']);
@@ -30,7 +39,14 @@ class LikeController extends Controller
             $author = $likeable->user;
 
             if($author->id !== $liker->id) {
-                $author->notify(new BlogLiked($likeable, $liker));
+                // Prevent notification duplication
+                $notificationData = $this->pDForBlogLiked(null, $likeable, $liker);
+
+                $notification = DB::table('notifications')
+                    ->where('data', json_encode($notificationData))->first();
+                if(!$notification) {
+                    $author->notify(new BlogLiked($likeable, $liker));
+                }
             }   
         }
         else if ($data->type === 'comment') {
@@ -40,7 +56,14 @@ class LikeController extends Controller
             $liker = User::find(Auth::id());
             
             if($author->id !== $liker->id) {
-                $author->notify(new CommentLiked($likeable, $liker));
+                // Prevent notification duplication
+                $notificationData = $this->pDForCommentLiked(null, $likeable, $liker);
+
+                $notification = DB::table('notifications')
+                    ->where('data', json_encode($notificationData))->first();
+                if(!$notification) {
+                    $author->notify(new CommentLiked($likeable, $liker));
+                }
             }
         }
         $like = new Like;

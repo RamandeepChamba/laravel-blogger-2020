@@ -27,7 +27,7 @@
                 @auth
                     {{-- Notifications --}}
                     <notifications-component
-                        :my-notifications="{{ json_encode(Auth::user()->notifications) }}"
+                        :my-notifications="{{ json_encode(Auth::user()->unreadNotifications) }}"
                         :auth-id="{{ json_encode(Auth::user()->id)}}"
                     >
                     </notifications-component>

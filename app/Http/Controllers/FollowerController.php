@@ -6,10 +6,15 @@ use Illuminate\Http\Request;
 use App\User;
 use App\Traits\FetchProfile;
 use App\Notifications\GainedFollower;
+use App\Traits\Notifications\PrepareData\GainedFollower as PDForGainedFollower;
+use Illuminate\Support\Facades\DB;
 
 class FollowerController extends Controller
 {
     use FetchProfile;
+    use PDForGainedFollower {
+        PDForGainedFollower::prepareData as pDForGainedFollower;
+    }
 
     public function __construct()
     {
@@ -93,7 +98,14 @@ class FollowerController extends Controller
         if($action == 'follow') {
             $follower->followings()->attach($leader);
             // Send notification to the leader
-            $leader->notify(new GainedFollower($follower));
+            // Prevent duplicate notification
+            $notificationData = $this->pDForGainedFollower(null, $follower);
+
+            $notification = DB::table('notifications')
+                ->where('data', json_encode($notificationData))->first();
+            if(!$notification) {
+                $leader->notify(new GainedFollower($follower));
+            }
         }
         else {
             $follower->followings()->detach($leader);

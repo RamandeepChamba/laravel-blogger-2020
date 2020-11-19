@@ -8,13 +8,13 @@ trait MakeNotification {
     
     public function toDatabase($notifiable)
     {
-        $data = $this->prepareData($notifiable);
+        $data = $this->prepareMyData($notifiable);
         return $data;
     }
 
     public function toBroadcast($notifiable)
     {
-        $data = $this->prepareData($notifiable);
+        $data = $this->prepareMyData($notifiable);
         return new BroadcastMessage([
             'data' => $data
         ]);

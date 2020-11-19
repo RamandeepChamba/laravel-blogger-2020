@@ -10,11 +10,13 @@ use Illuminate\Notifications\Notification;
 use App\User;
 use App\Blog;
 use App\Traits\MakeNotification;
+use App\Traits\Notifications\PrepareData\BlogLiked as PrepareData;
 
 class BlogLiked extends Notification
 {
     use Queueable;
     use MakeNotification;
+    use PrepareData;
 
     /**
      * Create a new notification instance.
@@ -52,21 +54,9 @@ class BlogLiked extends Notification
                     ->line('Thank you for using our application!');
     }
 
-    private function prepareData($notifiable)
+    private function prepareMyData($notifiable)
     {
-        $blog = (object)NULL;
-        $liker = (object)NULL;
-        
-        $blog->id = $this->blog->id;
-        $blog->title = $this->blog->title;
-
-        $liker->id = $this->liker->id;
-        $liker->name = $this->liker->name;
-            
-        return [
-            'blog' => $blog,
-            'liker' => $liker
-        ];
+        return $this->prepareData($notifiable, $this->blog, $this->liker);
     }
 
     /**

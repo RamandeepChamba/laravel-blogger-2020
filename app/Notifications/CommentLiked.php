@@ -9,11 +9,13 @@ use Illuminate\Notifications\Notification;
 use App\User;
 use App\Comment;
 use App\Traits\MakeNotification;
+use App\Traits\Notifications\PrepareData\CommentLiked as PrepareData;
 
 class CommentLiked extends Notification
 {
     use Queueable;
     use MakeNotification;
+    use PrepareData;
 
     /**
      * Create a new notification instance.
@@ -51,22 +53,9 @@ class CommentLiked extends Notification
                     ->line('Thank you for using our application!');
     }
 
-    public function prepareData($notifiable)
+    public function prepareMyData($notifiable)
     {
-        $comment = (object)NULL;
-        $liker = (object)NULL;
-        
-        $comment->id = $this->comment->id;
-        $comment->comment = $this->comment->comment;
-        $comment->blog_id = $this->comment->commentable_id;
-
-        $liker->id = $this->liker->id;
-        $liker->name = $this->liker->name;
-            
-        return [
-            'comment' => $comment,
-            'liker' => $liker
-        ];
+        return $this->prepareData($notifiable, $this->comment, $this->liker);
     }
 
     /**
