@@ -28,7 +28,6 @@
             }
         },
         mounted() {
-            console.log(this.comment)
         },
         methods: {
         }

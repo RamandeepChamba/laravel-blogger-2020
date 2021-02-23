@@ -5,8 +5,10 @@
 # TODO
 
 * Deploy
-    * Remote DB
+    * Broadcasting not working
+        * Can't work in heroku
     * Upload avatars to cloud
+* Make site responsive
 * Learn more eloquent
     * groupBy etc.
 * You can use variable as method name

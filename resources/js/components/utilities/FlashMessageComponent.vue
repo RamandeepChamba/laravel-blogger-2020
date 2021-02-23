@@ -23,6 +23,7 @@
             if(this.$props.flashType && (this.$props.flashType == 'broadcast')) {
                 this.hide = true
                 // Listen for broadcast event
+                /*
                 if (this.$props.flashData && this.$props.flashData.blogId) {
                     Echo.channel('blog-updated')
                     .listen('BlogUpdated', (e) => {
@@ -37,6 +38,7 @@
                         }
                     });
                 }
+                */
             }
             else {
                 this.hide = false
