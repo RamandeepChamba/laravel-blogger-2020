@@ -46,7 +46,11 @@ class LoginController extends Controller
 
         // Set the previous url that we came from to redirect to after successful login but only if is internal
         if(($urlPrevious != $urlBase . '/login') && (substr($urlPrevious, 0, strlen($urlBase)) === $urlBase)) {
-            session()->put('url.intended', $urlPrevious);
+            // Not redirect to previous url 
+                // If asked to login after user account is deleted (/profile/deletedUserId)
+            if(!str_contains($urlPrevious, '/profile')) {
+                session()->put('url.intended', $urlPrevious);
+            }
         }
 
         return view('auth.login');
