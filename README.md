@@ -3,11 +3,9 @@
 ### A blogging app made with Laravel 7 and Vue.js
 
 # TODO
-
 * Deploy
     * Broadcasting not working
         * Can't work in heroku
-    * Upload avatars to cloud
 * Make site responsive
 * Learn more eloquent
     * groupBy etc.

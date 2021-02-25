@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Profile;
 use App\Traits\FetchProfile;
+use \Image4IO\Image4IOApi;
+use Illuminate\Support\Facades\App;
 
 class ProfileController extends Controller
 {
@@ -56,21 +58,33 @@ class ProfileController extends Controller
             $profile->save();
         }
         elseif(isset($data->avatar)) {
-            // Upload avatar
-            // Check if directory exists
-            $profileDir = 'uploads/' . $auth_id . '/profile';
-            if(!Storage::exists($profileDir)) {
-                // Not? Create
-                Storage::makeDirectory($profileDir);
+            $path = 'uploads/' . $auth_id . '/profile';
+
+            if (App::environment('production')) {
+                $apiKey = env('I4I_API_KEY');
+                $apiSecret = env('I4I_API_SECRET');   
+                // Upload avatar
+                $client = new Image4IOApi($apiKey, $apiSecret);
+                // Delete avatar        
+                if(isset($profile->avatar)) {
+                    // https://cdn.image4.io/ramandeepchamba/fe9fc509-1121-4177-b567-e4e4b0391950.jpeg
+                    $avatarName = substr($profile->avatar, strrpos($profile->avatar, '/'));
+                    $response = $client->deleteImage($avatarName);
+                }
+                // Store avatar
+                $response = $client->uploadImage($data->avatar, $path, false, false);
+                $avatarPath = json_decode($response['content'])->uploadedFiles[0]->url;
             }
-            // Delete previous avatar if any
-            array_map('unlink', glob(storage_path('app/'. $profileDir . '/avatar*')));
-            // Store avatar
-            $avatarPath = Storage::putFileAs(
-                $profileDir,
-                $data->avatar,
-                'avatar.' . $data->avatar->extension()
-            );
+            elseif (App::environment('local')) {
+                $profileDir = 'uploads/' . $auth_id . '/profile';
+                // Delete previous avatar if any
+                Storage::deleteDirectory($profileDir);
+
+                Storage::makeDirectory($profileDir);
+                // Store avatar
+                $avatarPath = $data->avatar->store($profileDir);
+            }
+            
             // Add link to profile
             $profile->avatar = asset($avatarPath);
             $profile->save();
