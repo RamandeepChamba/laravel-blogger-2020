@@ -9,6 +9,7 @@ use App\User;
 use App\Traits\DeleteBlog;
 use App\Traits\DeleteComment;
 use App\Traits\FilterBlogs;
+use Illuminate\Support\Facades\App;
 
 class UserController extends Controller
 {
@@ -28,7 +29,17 @@ class UserController extends Controller
         // Delete user likes
         $user->likes()->delete();
         // Delete uploaded files (profile pics etc.)
-        Storage::deleteDirectory('uploads/' . $user->id);
+        if (App::environment('production')) {
+            // Delete avatar        
+            if(isset($user->profile->avatar)) {
+                // https://cdn.image4.io/ramandeepchamba/fe9fc509-1121-4177-b567-e4e4b0391950.jpeg
+                $avatarName = substr($user->profile->avatar, strrpos($user->profile->avatar, '/'));
+                $response = $client->deleteImage($avatarName);
+            }
+        }
+        elseif (App::environment('local')) {
+            Storage::deleteDirectory('uploads/' . $user->id);
+        }
         // Delete profile
         $user->profile()->delete();
         // Delete blogs with its comments and likes
