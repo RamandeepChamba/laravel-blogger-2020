@@ -9,6 +9,7 @@ use App\User;
 use App\Traits\DeleteBlog;
 use App\Traits\DeleteComment;
 use App\Traits\FilterBlogs;
+use App\Traits\Connections\I4I;
 use Illuminate\Support\Facades\App;
 
 class UserController extends Controller
@@ -16,6 +17,7 @@ class UserController extends Controller
     use DeleteBlog;
     use DeleteComment;
     use FilterBlogs;
+    use I4I;
 
     public function __construct()
     {
@@ -29,7 +31,8 @@ class UserController extends Controller
         // Delete user likes
         $user->likes()->delete();
         // Delete uploaded files (profile pics etc.)
-        if (App::environment('production')) {
+        if (App::environment('production')) {  
+            $client = $this->getI4IConnection();
             // Delete avatar        
             if(isset($user->profile->avatar)) {
                 // https://cdn.image4.io/ramandeepchamba/fe9fc509-1121-4177-b567-e4e4b0391950.jpeg

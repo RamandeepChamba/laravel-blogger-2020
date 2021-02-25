@@ -6,12 +6,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Profile;
 use App\Traits\FetchProfile;
-use \Image4IO\Image4IOApi;
+use App\Traits\Connections\I4I;
 use Illuminate\Support\Facades\App;
 
 class ProfileController extends Controller
 {
     use FetchProfile;
+    use I4I;
 
     public function __construct()
     {
@@ -61,10 +62,7 @@ class ProfileController extends Controller
             $path = 'uploads/' . $auth_id . '/profile';
 
             if (App::environment('production')) {
-                $apiKey = env('I4I_API_KEY');
-                $apiSecret = env('I4I_API_SECRET');   
-                // Upload avatar
-                $client = new Image4IOApi($apiKey, $apiSecret);
+                $client = $this->getI4IConnection();
                 // Delete avatar        
                 if(isset($profile->avatar)) {
                     // https://cdn.image4.io/ramandeepchamba/fe9fc509-1121-4177-b567-e4e4b0391950.jpeg

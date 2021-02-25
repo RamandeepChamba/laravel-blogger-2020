@@ -5,7 +5,7 @@ namespace App\Traits;
 use \Auth;
 use App\Comment;
 
-trait prettyComment {
+trait PrettyComment {
     public function prettyComment($comment_id)
     {
         return Comment::where('id', '=', $comment_id)
