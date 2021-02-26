@@ -28,6 +28,9 @@
         width: 50px;
         border-radius: 50%;
     }
+    .comment {
+        overflow: auto;
+    }
 </style>
 
 <template>

@@ -2,8 +2,8 @@
 
 @section('title', '| Blog | Create')
 @section('content')
-<div class="container">
-    <h1>Add Blog</h1>
+<div class="container mt-5">
+    <h1 class="text-center">Add Blog</h1>
     <div class="row justify-content-center">
         <div class="col-md-8">
             {{-- Add Blog Form --}}

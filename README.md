@@ -6,7 +6,7 @@
 * Deploy
     * Broadcasting not working
         * Can't work in heroku
-* Make site responsive
+* Revise your site thoroughly
 * Learn more eloquent
     * groupBy etc.
 * You can use variable as method name

@@ -1,0 +1,22 @@
+.follower-list-img {
+    vertical-align: middle;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+}
+.follower-list-name {
+    display: flex;
+    align-self: center;
+    margin: 0;
+    margin-left: 1rem;
+    font-size: 1rem;
+}
+@include media-breakpoint-up(sm) {
+    .follower-list-img {
+        width: 100px;
+        height: 100px;
+    }
+    .follower-list-name {
+        font-size: 1.5rem;
+    }
+}

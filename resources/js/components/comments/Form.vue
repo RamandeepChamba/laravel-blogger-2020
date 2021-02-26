@@ -3,7 +3,8 @@
         <form 
             v-show="authId !== -1"
             v-on:submit.prevent="addComment">
-            <textarea v-model="comment" cols="70"
+            <textarea v-model="comment"
+                class="form-control"
                 aria-describedby="commentHelp" 
                 placeholder="Write your opinion on this"
                 maxlength="300" minlength="5" required

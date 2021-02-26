@@ -1,0 +1,15 @@
+.welcome-title {
+    font-size: 4rem;
+}
+.welcome-container {
+    min-height: 50vh;
+}
+
+@include media-breakpoint-up(sm) {
+    .welcome-title {
+        font-size: 6rem;
+    }
+    .welcome-container {
+        min-height: 100vh;
+    }
+}

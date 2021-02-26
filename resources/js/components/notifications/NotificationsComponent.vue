@@ -1,9 +1,10 @@
 <template>
-    <div class="dropdown d-flex flex-grow-1 justify-content-end mr-5">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <div class="notifications-container dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" 
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Notifications {{notifications.length}}
         </button>
-        <div class="dropdown-menu dropdown-menu-right" 
+        <div class="dropdown-menu dropdown-menu-right notifications-list" 
             aria-labelledby="dropdownMenuButton"
         >
             <div class="dropdown-item" v-show="!notifications.length">
@@ -27,6 +28,7 @@
                     :is="getNotificationType(notification.type)"
                     :notification-data="notification.data"
                     @mark-as-read="markAsRead(notification.id)"
+                    class="text-wrap"
                 >
                 </component>
             </div>

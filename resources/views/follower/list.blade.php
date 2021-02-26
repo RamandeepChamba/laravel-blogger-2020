@@ -6,10 +6,8 @@
                 class="d-inline-flex align-items-stretch"
             >
                 <img src="{{$user->profile->avatar}}" 
-                    style="{vertical-align: middle;height: 100px;
-                        width: 100px;border-radius: 50%;}"
-                    class="d-flex mr-1 img-fluid img-thumbnail" alt="avatar">
-                <p class="d-flex align-self-center m-0 ml-2 h3">{{$user->name}}</p>
+                    class="d-flex mr-1 img-fluid img-thumbnail follower-list-img" alt="avatar">
+                <p class="follower-list-name">{{$user->name}}</p>
             </a>
         </li>
     @endforeach

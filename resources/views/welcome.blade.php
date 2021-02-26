@@ -39,10 +39,6 @@
             text-align: center;
         }
 
-        .title {
-            font-size: 84px;
-        }
-
         .links > a {
             color: #636b6f;
             padding: 0 25px;
@@ -59,7 +55,7 @@
     </style>
 @endpush
 @section('content')
-    <div class="flex-center position-ref full-height">
+    <div class="flex-center position-ref welcome-container">
         @push('nav-links-auth-right')
             <li class="nav-item">
                 <a href="{{ url('/home') }}" class="nav-link">Home</a>
@@ -67,7 +63,7 @@
         @endpush
 
         <div class="content">
-            <div class="title m-b-md">
+            <div class="title m-b-md welcome-title">
                 Blogger
             </div>
 

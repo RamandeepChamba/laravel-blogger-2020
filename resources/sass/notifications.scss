@@ -1,0 +1,21 @@
+.notifications-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+.notifications-list {
+    width: 100%;
+    overflow: auto;
+}
+
+@include media-breakpoint-up(sm) {
+    .notifications-container {
+        flex-grow: 1;
+        justify-content: flex-end;
+        margin-right: 2rem;
+        width: auto;
+    }
+    .notifications-list {
+        width: auto;
+    }
+}

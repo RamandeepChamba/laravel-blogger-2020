@@ -1,7 +1,7 @@
 <template>
     <div class="container my-3">
         <form>
-            <textarea name="comment" cols="30" rows="2"
+            <textarea name="comment" class="form-control"
                 aria-describedby="commentHelp"
                 maxlength="300"
                 minlength="5"

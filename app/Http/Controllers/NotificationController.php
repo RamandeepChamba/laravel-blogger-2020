@@ -25,7 +25,7 @@ class NotificationController extends Controller
         if (count($notifications)) {
             $notifications->toQuery()
             ->where('id', $id)
-            ->first()->markAsRead();
+            ->first()->delete();
         }
         $user->refresh();
         $response = (object)NULL;
@@ -37,7 +37,7 @@ class NotificationController extends Controller
     {
         $user = User::find(request()->user()->id);
         // Mark all as read
-        $user->unreadNotifications->markAsRead();
+        $user->notifications()->delete();
 
         return 1;
     }
