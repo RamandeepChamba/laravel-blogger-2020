@@ -3,6 +3,8 @@
 ### A blogging app made with Laravel 7 and Vue.js
 
 # TODO
+* Local Symlink not working for user profile pic
+* Make it look sexy
 * Deploy
     * Broadcasting not working
         * Can't work in heroku
